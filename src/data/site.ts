@@ -111,34 +111,18 @@ export const education = [
     school: 'CHARUSAT University',
     degree: 'B.Tech, Computer Engineering',
     period: 'Oct 2020 — Apr 2024',
-    detail: 'AI · NLP · DSA · Networking · Big Data · Computer Vision · Databases',
+    detail: 'Artificial Intelligence · Natural Language Processing · Data Structures & Algorithms · Networking · Big Data Analytics · Computer Vision · Database Systems',
   },
 ];
 
+// Ordered as shown on the site — one flat list, ChatDB (oldest) last.
 export const projects = [
-  {
-    name: 'ChatDB',
-    repo: 'https://github.com/SapnilPatel/ChatDB',
-    blurb:
-      'Natural-language interface to SQL & NoSQL databases powered by LLMs. Ask questions in plain English; get validated queries and results. Lead developer.',
-    stack: ['LLMs', 'SQL', 'NoSQL', 'Semantic Parsing'],
-    featured: true,
-  },
   {
     name: 'Silicon Validation Log-Analysis Agent',
     repo: 'https://github.com/SapnilPatel/Silicon-Validation-Log-Analysis-Agent',
     blurb:
       'Multi-agent AI debug assistant (LangGraph + Pinecone RAG) automating post-silicon failure triage across 10M+ validation logs — cutting engineering debugging time 40% and surfacing 85%+ of recurring failure patterns.',
     stack: ['LangGraph', 'Pinecone', 'RAG', 'Anomaly Detection'],
-    featured: true,
-  },
-  {
-    name: 'Agentic Anomaly & Root-Cause Intelligence',
-    repo: 'https://github.com/SapnilPatel/Agentic_Anomaly_and_Root_Cause_Intelligence_Platform',
-    blurb:
-      'Agent-driven platform that detects anomalies in operational data and reasons about their root cause autonomously.',
-    stack: ['Multi-agent', 'Anomaly Detection', 'Python'],
-    featured: true,
   },
   {
     name: 'epoll-httpd',
@@ -146,7 +130,13 @@ export const projects = [
     blurb:
       'A multithreaded HTTP/1.1 server from scratch in C++17 on raw epoll, SO_REUSEPORT, and sendfile — ~150k req/s on a 2-core Xeon, 1.6× nginx throughput at under half the resident memory, with published benchmark methodology.',
     stack: ['C++17', 'epoll', 'sendfile', 'Systems'],
-    featured: true,
+  },
+  {
+    name: 'Agentic Anomaly & Root-Cause Intelligence',
+    repo: 'https://github.com/SapnilPatel/Agentic_Anomaly_and_Root_Cause_Intelligence_Platform',
+    blurb:
+      'Agent-driven platform that detects anomalies in operational data and reasons about their root cause autonomously.',
+    stack: ['Multi-agent', 'Anomaly Detection', 'Python'],
   },
   {
     name: 'Brain-Thought-Visualization',
@@ -154,7 +144,6 @@ export const projects = [
     blurb:
       'Reconstructing visual experience from brain activity — where neuroscience meets generative models. Part of my research at USC CeNEC.',
     stack: ['Computer Vision', 'Generative Models', 'fMRI'],
-    featured: false,
   },
   {
     name: 'Multi-Robot Warehouse Navigation Simulator',
@@ -162,7 +151,13 @@ export const projects = [
     blurb:
       'Simulating coordinated multi-robot path planning and conflict resolution in warehouse environments.',
     stack: ['Path Planning', 'Simulation', 'Python'],
-    featured: false,
+  },
+  {
+    name: 'ChatDB',
+    repo: 'https://github.com/SapnilPatel/ChatDB',
+    blurb:
+      'Natural-language interface to SQL & NoSQL databases powered by LLMs. Ask questions in plain English; get validated queries and results. Lead developer.',
+    stack: ['LLMs', 'SQL', 'NoSQL', 'Semantic Parsing'],
   },
 ];
 
@@ -207,11 +202,6 @@ export const whatIDo = [
     icon: '■',
     title: 'LLM Applications & Fine-Tuning',
     body: 'RAG, natural language → SQL, LoRA/QLoRA domain adaptation, inference optimization, rigorous evaluation.',
-  },
-  {
-    icon: '◇',
-    title: 'Cloud & MLOps',
-    body: 'Docker, Kubernetes (GKE), CI/CD, Prometheus/Grafana observability across AWS and GCP.',
   },
   {
     icon: '△',
