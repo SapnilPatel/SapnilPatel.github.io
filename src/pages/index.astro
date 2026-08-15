@@ -1,8 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import Terminal from '../components/Terminal.astro';
+import Flagship from '../components/Flagship.astro';
 import SamplingDemo from '../components/SamplingDemo.astro';
-import { profile, projects, roles, skills, whatIDo } from '../data/site';
+import { profile, projects, roles, skills, whatIDo, flagships } from '../data/site';
 
 const featured = projects.filter((p) => p.featured);
 const more = projects.filter((p) => !p.featured);
@@ -28,6 +29,14 @@ const nav = [
             <span class="text-dim">./</span>{label}
           </a>
         ))}
+        {profile.resumeUrl && (
+          <a
+            href={profile.resumeUrl}
+            target="_blank"
+            rel="noreferrer"
+            class="rounded border border-neon/40 bg-neon/10 px-3 py-1 text-neon transition hover:bg-neon/20"
+          >résumé ↓</a>
+        )}
         <a
           href={profile.github}
           target="_blank"
@@ -42,8 +51,12 @@ const nav = [
     <!-- ── hero ─────────────────────────────────────────────────────── -->
     <section class="grid items-center gap-10 py-16 md:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
       <div>
-        <p class="mb-4 font-mono text-sm text-neon">
-          <span class="text-dim">$</span> initializing…
+        <p class="mb-4 inline-flex items-center gap-2 rounded-full border border-neon/30 bg-neon/10 px-3.5 py-1.5 font-mono text-xs text-neon">
+          <span class="relative flex size-2">
+            <span class="absolute inline-flex size-full animate-ping rounded-full bg-neon opacity-60"></span>
+            <span class="relative inline-flex size-2 rounded-full bg-neon"></span>
+          </span>
+          {profile.status}
         </p>
         <h1 class="text-4xl font-bold tracking-tight text-fg md:text-5xl">
           {profile.name}
@@ -65,10 +78,24 @@ const nav = [
       <Terminal />
     </section>
 
+    <!-- ── flagship case studies ────────────────────────────────────── -->
+    <section id="work" class="reveal scroll-mt-20 py-14">
+      <h2 class="mb-2 font-mono text-xl text-fg">
+        <span class="text-dim">01</span> <span class="text-neon">/</span> flagship_builds
+      </h2>
+      <p class="mb-8 max-w-2xl text-sm leading-relaxed text-mute">
+        Two projects that best represent how I work — one from the AI side, one from the
+        systems side. Real benchmarks, honest methodology, production-shaped.
+      </p>
+      <div class="grid gap-5 xl:grid-cols-2">
+        {flagships.map((f) => <Flagship f={f} />)}
+      </div>
+    </section>
+
     <!-- ── what i do ────────────────────────────────────────────────── -->
     <section class="reveal py-14">
       <h2 class="mb-8 font-mono text-xl text-fg">
-        <span class="text-dim">01</span> <span class="text-neon">/</span> what_i_do
+        <span class="text-dim">02</span> <span class="text-neon">/</span> what_i_do
       </h2>
       <div class="grid gap-4 sm:grid-cols-2">
         {whatIDo.map((w) => (
@@ -81,9 +108,9 @@ const nav = [
     </section>
 
     <!-- ── work ─────────────────────────────────────────────────────── -->
-    <section id="work" class="reveal scroll-mt-20 py-14">
+    <section id="projects" class="reveal scroll-mt-20 py-14">
       <h2 class="mb-8 font-mono text-xl text-fg">
-        <span class="text-dim">02</span> <span class="text-neon">/</span> selected_work
+        <span class="text-dim">03</span> <span class="text-neon">/</span> selected_work
       </h2>
       <div class="grid gap-4 md:grid-cols-2">
         {featured.map((p) => (
@@ -129,7 +156,7 @@ const nav = [
     <!-- ── playground ───────────────────────────────────────────────── -->
     <section id="playground" class="reveal scroll-mt-20 py-14">
       <h2 class="mb-2 font-mono text-xl text-fg">
-        <span class="text-dim">03</span> <span class="text-neon">/</span> playground
+        <span class="text-dim">04</span> <span class="text-neon">/</span> playground
       </h2>
       <p class="mb-8 max-w-2xl text-sm leading-relaxed text-mute">
         A tiny language model running in your browser. Steer its decoding with temperature and
@@ -141,7 +168,7 @@ const nav = [
     <!-- ── experience ───────────────────────────────────────────────── -->
     <section id="experience" class="reveal scroll-mt-20 py-14">
       <h2 class="mb-8 font-mono text-xl text-fg">
-        <span class="text-dim">04</span> <span class="text-neon">/</span> experience
+        <span class="text-dim">05</span> <span class="text-neon">/</span> experience
       </h2>
       <div class="relative flex flex-col gap-8 border-l border-edge pl-7">
         {roles.map((r) => (
@@ -167,7 +194,7 @@ const nav = [
     <!-- ── stack ────────────────────────────────────────────────────── -->
     <section class="reveal py-14">
       <h2 class="mb-8 font-mono text-xl text-fg">
-        <span class="text-dim">05</span> <span class="text-neon">/</span> stack
+        <span class="text-dim">06</span> <span class="text-neon">/</span> stack
       </h2>
       <div class="grid gap-4 sm:grid-cols-2">
         {Object.entries(skills).map(([group, items]) => (

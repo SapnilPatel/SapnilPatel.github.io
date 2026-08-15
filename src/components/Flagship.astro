@@ -1,0 +1,75 @@
+---
+// Flagship case-study card — recruiter-scannable: plain-English one-liner,
+// big metric callouts, then depth (approach, architecture) for engineers.
+interface Props {
+  f: {
+    tag: string;
+    name: string;
+    repo: string;
+    oneLiner: string;
+    problem: string;
+    approach: string[];
+    metrics: { value: string; label: string }[];
+    architecture: string;
+    stack: string[];
+    note: string;
+  };
+}
+const { f } = Astro.props;
+---
+
+<article class="rounded-lg border border-edge bg-panel transition hover:border-neon/30 hover:shadow-[0_0_50px_-20px_rgb(61_220_132/0.35)]">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-edge px-6 py-4">
+    <div class="flex items-center gap-3">
+      <span class="rounded-sm border border-neon/40 bg-neon/10 px-2 py-0.5 font-mono text-[11px] text-neon">{f.tag}</span>
+      <h3 class="font-mono text-lg text-fg">{f.name}</h3>
+    </div>
+    <a
+      href={f.repo}
+      target="_blank"
+      rel="noreferrer"
+      class="rounded border border-edge-2 px-3 py-1 font-mono text-xs text-mute transition hover:border-neon/50 hover:text-neon"
+    >view code ↗</a>
+  </div>
+
+  <div class="px-6 py-5">
+    <p class="text-[15px] leading-relaxed text-fg">{f.oneLiner}</p>
+
+    <!-- metric callouts — the recruiter row -->
+    <div class="mt-5 grid grid-cols-3 gap-3">
+      {f.metrics.map((m) => (
+        <div class="rounded-md border border-edge bg-ink px-3 py-3 text-center">
+          <p class="font-mono text-xl font-bold text-neon md:text-2xl">{m.value}</p>
+          <p class="mt-1 text-[11px] leading-snug text-mute">{m.label}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="mt-5 text-sm leading-relaxed text-mute">
+      <span class="font-mono text-xs text-dim">problem // </span>{f.problem}
+    </p>
+
+    <ul class="mt-4 flex flex-col gap-1.5">
+      {f.approach.map((a) => (
+        <li class="text-sm leading-relaxed text-mute">
+          <span class="mr-2 font-mono text-neon">▸</span>{a}
+        </li>
+      ))}
+    </ul>
+
+    <div class="mt-5 overflow-x-auto rounded-md border border-edge bg-ink px-4 py-3">
+      <p class="mb-2 font-mono text-[10px] text-dim">// architecture</p>
+      <pre class="font-mono text-[11px] leading-relaxed text-mute">{f.architecture}</pre>
+    </div>
+
+    <div class="mt-4 flex flex-wrap gap-2">
+      {f.stack.map((s) => (
+        <span class="rounded-sm border border-edge px-2 py-0.5 font-mono text-[11px] text-dim">{s}</span>
+      ))}
+    </div>
+
+    <p class="mt-4 border-t border-edge pt-3 font-mono text-[13px] italic text-amber/80">
+      <span class="not-italic text-dim"># </span>{f.note}
+    </p>
+  </div>
+</article>

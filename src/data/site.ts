@@ -12,7 +12,62 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/sapnilpatel/',
   medium: 'https://medium.com/@SapnilPatel',
   resumeUrl: '', // drop a PDF in /public and set e.g. '/resume.pdf'
+  // recruiter-facing availability status — shown as the green-pulse pill
+  status: 'Open to full-time AI / SDE roles · graduating Dec 2026',
 };
+
+// ── flagship case studies — one AI, one SDE, shown before everything else ──
+export const flagships = [
+  {
+    tag: 'AI · ML Systems',
+    name: 'llm-inference-optimizer',
+    repo: 'https://github.com/SapnilPatel/llm-inference-optimizer',
+    oneLiner: 'A distributed LLM serving platform that makes LLaMA-3 & Mistral answer faster, cheaper, and at higher volume.',
+    problem: 'Naive LLM serving runs one request at a time in FP32 — GPUs sit idle between requests and memory is wasted, making inference slow and expensive.',
+    approach: [
+      'Dynamic batching: concurrent requests merged into a single forward pass within a max_wait_ms window',
+      'Explicit KV-cache decode loop with a memory estimator for OOM-safe admission control',
+      'FP16/BF16 mixed precision with automatic CPU→FP32 fallback',
+      'Tensor parallelism across GPUs via DeepSpeed / HF Accelerate',
+      'Prometheus metrics + Grafana dashboard; Docker + Kubernetes HPA deploy',
+    ],
+    metrics: [
+      { value: '2.3×', label: 'throughput vs FP32 baseline' },
+      { value: '−38%', label: 'GPU memory' },
+      { value: 'p50→p99', label: 'full latency breakdown' },
+    ],
+    architecture: `HTTP ─▶ FastAPI ─▶ InferenceEngine ─▶ DynamicBatcher ─▶ ModelBackend
+                     │                   │                  │
+                /metrics           async queue +      prefill + KV-cached
+               (Prometheus)       max_wait window     decode, FP16/BF16 · TP`,
+    stack: ['PyTorch', 'DeepSpeed', 'FastAPI', 'Kubernetes', 'Prometheus', 'Grafana'],
+    note: 'Inference cost is an engineering problem, not a hardware bill you just pay.',
+  },
+  {
+    tag: 'SDE · Systems',
+    name: 'epoll-httpd',
+    repo: 'https://github.com/SapnilPatel/epoll-httpd',
+    oneLiner: 'A multithreaded HTTP/1.1 server written from scratch in C++17 that beats nginx on small-payload throughput.',
+    problem: 'Frameworks hide where HTTP performance actually comes from. Building on raw epoll, SO_REUSEPORT, and sendfile — no dependencies beyond libc and pthreads — exposes every microsecond.',
+    approach: [
+      'Event-driven core on epoll with SO_REUSEPORT worker sharding',
+      'Zero-copy responses via sendfile',
+      'Benchmarked honestly against nginx: matched config, pinned cores, published methodology and run-to-run variance',
+    ],
+    metrics: [
+      { value: '~150k', label: 'requests/sec (1 KB, 2-core Xeon)' },
+      { value: '1.6×', label: 'nginx throughput, same hardware' },
+      { value: '<½', label: 'the resident memory (5 MB vs 10 MB)' },
+    ],
+    architecture: `        :8080  (SO_REUSEPORT)
+   ┌──────────┴──────────┐
+ worker 0    …    worker N        each: epoll loop
+   │                    │         parse ▸ route ▸ sendfile
+   └── zero-copy responses ──▶ kernel copy path`,
+    stack: ['C++17', 'epoll', 'sendfile', 'pthreads', 'wrk'],
+    note: 'At 64 KB payloads both servers hit the kernel copy path — knowing where your bottleneck moves is the whole game.',
+  },
+];
 
 export const roles = [
   {
@@ -37,8 +92,9 @@ export const roles = [
   {
     title: 'MS, Applied Data Science',
     org: 'University of Southern California',
-    period: 'Los Angeles',
+    period: 'graduating Dec 2026',
     points: [
+      'Research Assistant @ CeNEC alongside coursework',
       'Core Tech Team member @DeCodeCafe, @GirlScript',
       'Open-source contributor',
     ],
@@ -46,14 +102,6 @@ export const roles = [
 ];
 
 export const projects = [
-  {
-    name: 'llm-inference-optimizer',
-    repo: 'https://github.com/SapnilPatel/llm-inference-optimizer',
-    blurb:
-      'High-throughput, low-latency LLM inference platform for LLaMA-3 & Mistral. Dynamic batching, KV-cache optimization, FP16/BF16 mixed precision, tensor parallelism — with Prometheus/Grafana observability and Kubernetes (HPA) deployment.',
-    stack: ['PyTorch', 'CUDA', 'FastAPI', 'Kubernetes', 'Prometheus'],
-    featured: true,
-  },
   {
     name: 'ChatDB',
     repo: 'https://github.com/SapnilPatel/ChatDB',
@@ -79,10 +127,18 @@ export const projects = [
     featured: true,
   },
   {
+    name: 'minisearch',
+    repo: 'https://github.com/SapnilPatel/minisearch',
+    blurb:
+      'A search engine from first principles — polite crawler, compact dedup filter, inverted index, BM25 ranking. 215 tests, answers queries in milliseconds.',
+    stack: ['Python', 'BM25', 'Information Retrieval'],
+    featured: true,
+  },
+  {
     name: 'Brain-Thought-Visualization',
     repo: 'https://github.com/SapnilPatel/Brain-Thought-Visualization',
     blurb:
-      'Reconstructing visual experience from brain activity — where neuroscience meets generative models.',
+      'Reconstructing visual experience from brain activity — where neuroscience meets generative models. Part of my research at USC CeNEC.',
     stack: ['Computer Vision', 'Generative Models', 'fMRI'],
     featured: false,
   },
@@ -92,22 +148,6 @@ export const projects = [
     blurb:
       'Simulating coordinated multi-robot path planning and conflict resolution in warehouse environments.',
     stack: ['Path Planning', 'Simulation', 'Python'],
-    featured: false,
-  },
-  {
-    name: 'epoll-httpd',
-    repo: 'https://github.com/SapnilPatel/epoll-httpd',
-    blurb:
-      'An event-driven HTTP server written from scratch in C++ on epoll — because understanding the metal matters.',
-    stack: ['C++', 'epoll', 'Systems'],
-    featured: false,
-  },
-  {
-    name: 'minisearch',
-    repo: 'https://github.com/SapnilPatel/minisearch',
-    blurb:
-      'A compact search engine built from first principles — indexing, ranking, retrieval.',
-    stack: ['Python', 'IR', 'Ranking'],
     featured: false,
   },
 ];
