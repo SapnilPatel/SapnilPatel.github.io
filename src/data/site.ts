@@ -161,7 +161,7 @@ export const education = [
     degree: 'B.Tech, Computer Engineering',
     period: 'Oct 2020 — May 2024',
     detail: 'Artificial Intelligence · Natural Language Processing · Data Structures & Algorithms · Operating Systems · Computer Networking · Computer Vision · Database Management Systems',
-    extra: '9.0 CGPA · Student Coordinator, Machine Learning Club · SAP Code Unnati · Codepie 2.0 team',
+    extra: '3.7 GPA · Student Coordinator, Machine Learning Club · SAP Code Unnati · Codepie 2.0 team',
   },
 ];
 
