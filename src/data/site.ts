@@ -174,6 +174,19 @@ export const skills = {
   'Cloud & Databases': ['AWS (SageMaker, EC2, S3)', 'GCP', 'PostgreSQL', 'MongoDB', 'Redis', 'Pinecone'],
 };
 
+export const hobbies = [
+  {
+    icon: '⛰',
+    title: 'On the trail',
+    body: 'Travel and hiking are how I reset — new cities, new trails, and the occasional summit. Living in LA means the mountains and the coast are both an hour away, and I take full advantage.',
+  },
+  {
+    icon: '📷',
+    title: 'Behind the lens',
+    body: 'Photography, mostly of the places the hiking takes me. Framing a shot scratches the same itch as designing a system: composition, constraints, and knowing what to leave out.',
+  },
+];
+
 export const whatIDo = [
   {
     icon: '◆',

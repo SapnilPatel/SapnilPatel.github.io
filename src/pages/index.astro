@@ -1,141 +1,159 @@
 ---
 import Base from '../layouts/Base.astro';
-import Terminal from '../components/Terminal.astro';
 import Flagship from '../components/Flagship.astro';
-import SamplingDemo from '../components/SamplingDemo.astro';
-import { profile, projects, roles, education, skills, whatIDo, flagships } from '../data/site';
+import { profile, projects, roles, education, skills, whatIDo, hobbies, flagships } from '../data/site';
 
 const featured = projects.filter((p) => p.featured);
 const more = projects.filter((p) => !p.featured);
 const nav = [
-  ['work', '#work'],
-  ['playground', '#playground'],
-  ['experience', '#experience'],
-  ['contact', '#contact'],
+  ['Work', '#work'],
+  ['Experience', '#experience'],
+  ['Off the clock', '#offclock'],
+  ['Contact', '#contact'],
 ] as const;
 ---
 
 <Base>
-  <div class="grid-bg pointer-events-none absolute inset-x-0 top-0 h-[720px]"></div>
+  <div class="graph-bg pointer-events-none absolute inset-x-0 top-0 h-[640px]"></div>
 
-  <header class="sticky top-0 z-50 border-b border-edge/70 bg-ink/80 backdrop-blur-md">
-    <nav class="mx-auto flex max-w-5xl items-center justify-between px-5 py-3.5 font-mono text-sm">
-      <a href="#" class="text-fg transition hover:text-neon">
-        <span class="text-neon">~</span>/{profile.handle}
+  <header class="sticky top-0 z-50 border-b border-line bg-paper/85 backdrop-blur-md">
+    <nav class="mx-auto flex max-w-5xl items-center justify-between px-5 py-3.5">
+      <a href="#" class="font-serif text-lg font-semibold text-ink2 transition hover:text-accent">
+        Sapnil<span class="text-accent">.</span>
       </a>
-      <div class="flex items-center gap-5">
+      <div class="flex items-center gap-6 text-sm">
         {nav.map(([label, href]) => (
-          <a href={href} class="hidden text-mute transition hover:text-neon sm:block">
-            <span class="text-dim">./</span>{label}
-          </a>
+          <a href={href} class="hidden font-medium text-mute transition hover:text-accent sm:block">{label}</a>
         ))}
         {profile.resumeUrl && (
           <a
             href={profile.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            class="rounded border border-neon/40 bg-neon/10 px-3 py-1 text-neon transition hover:bg-neon/20"
-          >résumé ↓</a>
+            class="rounded-md bg-accent px-3.5 py-1.5 font-medium text-card shadow-sm transition hover:bg-accent-deep"
+          >Résumé ↓</a>
         )}
-        <a
-          href={profile.github}
-          target="_blank"
-          rel="noreferrer"
-          class="rounded border border-edge-2 px-3 py-1 text-mute transition hover:border-neon/50 hover:text-neon"
-        >github ↗</a>
       </div>
     </nav>
   </header>
 
   <main class="relative mx-auto max-w-5xl px-5">
     <!-- ── hero ─────────────────────────────────────────────────────── -->
-    <section class="grid items-center gap-10 py-16 md:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+    <section class="grid items-center gap-12 py-16 md:py-24 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
       <div>
-        <p class="mb-4 inline-flex items-center gap-2 rounded-full border border-neon/30 bg-neon/10 px-3.5 py-1.5 font-mono text-xs text-neon">
+        <p class="mb-5 inline-flex items-center gap-2 rounded-full border border-moss/30 bg-moss/10 px-3.5 py-1.5 text-xs font-medium text-moss">
           <span class="relative flex size-2">
-            <span class="absolute inline-flex size-full animate-ping rounded-full bg-neon opacity-60"></span>
-            <span class="relative inline-flex size-2 rounded-full bg-neon"></span>
+            <span class="absolute inline-flex size-full animate-ping rounded-full bg-moss opacity-50"></span>
+            <span class="relative inline-flex size-2 rounded-full bg-moss"></span>
           </span>
           {profile.status}
         </p>
-        <h1 class="text-4xl font-bold tracking-tight text-fg md:text-5xl">
-          {profile.name}
+        <h1 class="font-serif text-5xl font-bold tracking-tight text-ink2 md:text-6xl">
+          Sapnil Patel
         </h1>
-        <p class="mt-2 font-mono text-lg text-neon glow md:text-xl">{profile.title}</p>
-        <p class="mt-5 max-w-md leading-relaxed text-mute">{profile.tagline}</p>
-        <div class="mt-7 flex flex-wrap gap-3 font-mono text-sm">
-          <a href="#work" class="rounded border border-neon/40 bg-neon/10 px-4 py-2 text-neon transition hover:bg-neon/20">
-            view work ▸
+        <p class="mt-4 text-xl leading-relaxed text-mute md:text-2xl">
+          <span class="mark font-serif font-semibold text-ink2">{profile.title}</span> — I build intelligent
+          systems that solve real problems: agentic AI workflows, LLM applications, and ML pipelines that ship.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#work" class="rounded-md bg-ink2 px-5 py-2.5 text-sm font-medium text-card shadow-sm transition hover:bg-black">
+            See my work
           </a>
-          <a href={`mailto:${profile.email}`} class="rounded border border-edge-2 px-4 py-2 text-mute transition hover:border-neon/40 hover:text-neon">
-            contact
+          <a href={`mailto:${profile.email}`} class="rounded-md border border-line-2 bg-card px-5 py-2.5 text-sm font-medium text-ink2 transition hover:border-accent hover:text-accent">
+            Get in touch
           </a>
         </div>
-        <p class="mt-8 font-mono text-xs text-dim">
-          {profile.location} · MS Applied Data Science @ USC
-        </p>
       </div>
-      <Terminal />
+
+      <!-- at-a-glance index card -->
+      <div class="card relative rotate-[0.6deg] p-6">
+        <span class="absolute -top-3 left-1/2 h-6 w-24 -translate-x-1/2 rotate-[-2deg] rounded-sm bg-mark/80 shadow-sm"></span>
+        <p class="label mb-4">at a glance</p>
+        <dl class="flex flex-col gap-3 text-sm">
+          <div class="flex justify-between gap-4">
+            <dt class="shrink-0 text-faint">Now</dt>
+            <dd class="text-right text-ink2">AI Automation Engineer @ Pacific Production Services</dd>
+          </div>
+          <div class="flex justify-between gap-4">
+            <dt class="shrink-0 text-faint">Research</dt>
+            <dd class="text-right text-ink2">AI RA @ USC-CeNEC Lab</dd>
+          </div>
+          <div class="flex justify-between gap-4">
+            <dt class="shrink-0 text-faint">Education</dt>
+            <dd class="text-right text-ink2">MS Applied Data Science, USC · Dec 2026</dd>
+          </div>
+          <div class="flex justify-between gap-4">
+            <dt class="shrink-0 text-faint">Base</dt>
+            <dd class="text-right text-ink2">{profile.location}</dd>
+          </div>
+          <div class="flex justify-between gap-4">
+            <dt class="shrink-0 text-faint">Focus</dt>
+            <dd class="text-right text-ink2">Agents · LLM serving · ML infra</dd>
+          </div>
+        </dl>
+        <div class="mt-4 flex gap-3 border-t border-line pt-4 text-sm">
+          <a href={profile.github} target="_blank" rel="noreferrer" class="font-medium text-accent transition hover:text-accent-deep">GitHub ↗</a>
+          <a href={profile.linkedin} target="_blank" rel="noreferrer" class="font-medium text-accent transition hover:text-accent-deep">LinkedIn ↗</a>
+          <a href={profile.medium} target="_blank" rel="noreferrer" class="font-medium text-accent transition hover:text-accent-deep">Medium ↗</a>
+        </div>
+      </div>
     </section>
 
     <!-- ── flagship case studies ────────────────────────────────────── -->
     <section id="work" class="reveal scroll-mt-20 py-14">
-      <h2 class="mb-2 font-mono text-xl text-fg">
-        <span class="text-dim">01</span> <span class="text-neon">/</span> flagship_builds
-      </h2>
-      <p class="mb-8 max-w-2xl text-sm leading-relaxed text-mute">
-        Two projects that best represent how I work — one from the AI side, one from the
-        systems side. Real benchmarks, honest methodology, production-shaped.
+      <p class="label mb-2">01 · The centerpiece</p>
+      <h2 class="font-serif text-3xl font-bold text-ink2">Flagship builds</h2>
+      <p class="mt-3 mb-8 max-w-2xl leading-relaxed text-mute">
+        Two projects that best show how I work — one from the AI side, one from the systems side.
+        Real benchmarks, honest methodology.
       </p>
-      <div class="grid gap-5 xl:grid-cols-2">
+      <div class="grid gap-6 xl:grid-cols-2">
         {flagships.map((f) => <Flagship f={f} />)}
       </div>
     </section>
 
     <!-- ── what i do ────────────────────────────────────────────────── -->
     <section class="reveal py-14">
-      <h2 class="mb-8 font-mono text-xl text-fg">
-        <span class="text-dim">02</span> <span class="text-neon">/</span> what_i_do
-      </h2>
+      <p class="label mb-2">02 · Craft</p>
+      <h2 class="mb-8 font-serif text-3xl font-bold text-ink2">What I do</h2>
       <div class="grid gap-4 sm:grid-cols-2">
         {whatIDo.map((w) => (
-          <div class="group rounded-lg border border-edge bg-panel p-5 transition hover:border-edge-2 hover:bg-panel-2">
-            <p class="font-mono text-neon">{w.icon} <span class="ml-1 text-fg">{w.title}</span></p>
+          <div class="card p-5 transition hover:border-line-2">
+            <p class="font-serif text-lg font-semibold text-ink2">{w.title}</p>
             <p class="mt-2 text-sm leading-relaxed text-mute">{w.body}</p>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- ── work ─────────────────────────────────────────────────────── -->
+    <!-- ── selected work ────────────────────────────────────────────── -->
     <section id="projects" class="reveal scroll-mt-20 py-14">
-      <h2 class="mb-8 font-mono text-xl text-fg">
-        <span class="text-dim">03</span> <span class="text-neon">/</span> selected_work
-      </h2>
+      <p class="label mb-2">03 · The shelf</p>
+      <h2 class="mb-8 font-serif text-3xl font-bold text-ink2">Selected work</h2>
       <div class="grid gap-4 md:grid-cols-2">
         {featured.map((p) => (
           <a
             href={p.repo}
             target="_blank"
             rel="noreferrer"
-            class="group flex flex-col rounded-lg border border-edge bg-panel p-6 transition hover:-translate-y-0.5 hover:border-neon/40 hover:shadow-[0_0_40px_-18px_rgb(61_220_132/0.4)]"
+            class="card group flex flex-col p-6 transition hover:-translate-y-0.5 hover:border-accent/50"
           >
             <div class="flex items-baseline justify-between gap-3">
-              <h3 class="font-mono text-fg transition group-hover:text-neon">{p.name}</h3>
-              <span class="font-mono text-xs text-dim transition group-hover:text-neon">↗</span>
+              <h3 class="font-serif text-lg font-semibold text-ink2 transition group-hover:text-accent">{p.name}</h3>
+              <span class="text-xs text-faint transition group-hover:text-accent">↗</span>
             </div>
             <p class="mt-3 grow text-sm leading-relaxed text-mute">{p.blurb}</p>
             <div class="mt-4 flex flex-wrap gap-2">
               {p.stack.map((s) => (
-                <span class="rounded-sm border border-edge px-2 py-0.5 font-mono text-[11px] text-dim">{s}</span>
+                <span class="rounded-full border border-line bg-paper px-2.5 py-0.5 font-mono text-[11px] text-mute">{s}</span>
               ))}
             </div>
           </a>
         ))}
       </div>
-      <details class="mt-6 group">
-        <summary class="cursor-pointer list-none font-mono text-sm text-dim transition hover:text-neon">
-          <span class="inline-block transition group-open:rotate-90">▸</span> more projects ({more.length})
+      <details class="group mt-6">
+        <summary class="cursor-pointer list-none text-sm font-medium text-mute transition hover:text-accent">
+          <span class="inline-block transition group-open:rotate-90">▸</span> More projects ({more.length})
         </summary>
         <div class="mt-4 grid gap-3 sm:grid-cols-2">
           {more.map((p) => (
@@ -143,9 +161,9 @@ const nav = [
               href={p.repo}
               target="_blank"
               rel="noreferrer"
-              class="group/c rounded-lg border border-edge bg-panel px-5 py-4 transition hover:border-edge-2"
+              class="card group/c px-5 py-4 transition hover:border-line-2"
             >
-              <p class="font-mono text-sm text-fg transition group-hover/c:text-neon">{p.name} <span class="text-dim">↗</span></p>
+              <p class="font-serif font-semibold text-ink2 transition group-hover/c:text-accent">{p.name} <span class="text-faint">↗</span></p>
               <p class="mt-1.5 text-[13px] leading-relaxed text-mute">{p.blurb}</p>
             </a>
           ))}
@@ -153,36 +171,23 @@ const nav = [
       </details>
     </section>
 
-    <!-- ── playground ───────────────────────────────────────────────── -->
-    <section id="playground" class="reveal scroll-mt-20 py-14">
-      <h2 class="mb-2 font-mono text-xl text-fg">
-        <span class="text-dim">04</span> <span class="text-neon">/</span> playground
-      </h2>
-      <p class="mb-8 max-w-2xl text-sm leading-relaxed text-mute">
-        A tiny language model running in your browser. Steer its decoding with temperature and
-        top-k, and watch the probability mass move — the same knobs that shape every LLM you talk to.
-      </p>
-      <SamplingDemo />
-    </section>
-
     <!-- ── experience ───────────────────────────────────────────────── -->
     <section id="experience" class="reveal scroll-mt-20 py-14">
-      <h2 class="mb-8 font-mono text-xl text-fg">
-        <span class="text-dim">05</span> <span class="text-neon">/</span> experience
-      </h2>
-      <div class="relative flex flex-col gap-8 border-l border-edge pl-7">
+      <p class="label mb-2">04 · The log</p>
+      <h2 class="mb-8 font-serif text-3xl font-bold text-ink2">Experience</h2>
+      <div class="relative flex flex-col gap-8 border-l-2 border-line pl-7">
         {roles.map((r) => (
           <div class="relative">
-            <span class="absolute -left-[33px] top-1.5 size-3 rounded-full border-2 border-neon bg-ink"></span>
+            <span class="absolute -left-[37px] top-1.5 size-3.5 rounded-full border-[3px] border-accent bg-paper"></span>
             <div class="flex flex-wrap items-baseline gap-x-3">
-              <h3 class="font-mono text-fg">{r.title}</h3>
-              <span class="font-mono text-xs text-dim">{r.period}</span>
+              <h3 class="font-serif text-lg font-semibold text-ink2">{r.title}</h3>
+              <span class="font-mono text-xs text-faint">{r.period}</span>
             </div>
-            <p class="mt-0.5 text-sm text-neon/80">{r.org}</p>
+            <p class="mt-0.5 text-sm font-medium text-accent">{r.org}</p>
             <ul class="mt-2 flex flex-col gap-1">
               {r.points.map((pt) => (
                 <li class="text-sm leading-relaxed text-mute">
-                  <span class="mr-2 text-dim">▸</span>{pt}
+                  <span class="mr-2 text-faint">▸</span>{pt}
                 </li>
               ))}
             </ul>
@@ -190,15 +195,15 @@ const nav = [
         ))}
       </div>
 
-      <h3 class="mt-12 mb-6 font-mono text-sm text-dim">// education</h3>
+      <p class="label mt-12 mb-4">Education</p>
       <div class="grid gap-4 sm:grid-cols-2">
         {education.map((e) => (
-          <div class="rounded-lg border border-edge bg-panel p-5">
+          <div class="card p-5">
             <div class="flex flex-wrap items-baseline justify-between gap-x-3">
-              <h4 class="font-mono text-sm text-fg">{e.degree}</h4>
-              <span class="font-mono text-xs text-dim">{e.period}</span>
+              <h4 class="font-serif font-semibold text-ink2">{e.degree}</h4>
+              <span class="font-mono text-xs text-faint">{e.period}</span>
             </div>
-            <p class="mt-1 text-sm text-neon/80">{e.school}</p>
+            <p class="mt-1 text-sm font-medium text-accent">{e.school}</p>
             <p class="mt-2 text-xs leading-relaxed text-mute">{e.detail}</p>
           </div>
         ))}
@@ -207,16 +212,15 @@ const nav = [
 
     <!-- ── stack ────────────────────────────────────────────────────── -->
     <section class="reveal py-14">
-      <h2 class="mb-8 font-mono text-xl text-fg">
-        <span class="text-dim">06</span> <span class="text-neon">/</span> stack
-      </h2>
+      <p class="label mb-2">05 · The toolbox</p>
+      <h2 class="mb-8 font-serif text-3xl font-bold text-ink2">Stack</h2>
       <div class="grid gap-4 sm:grid-cols-2">
         {Object.entries(skills).map(([group, items]) => (
-          <div class="rounded-lg border border-edge bg-panel p-5">
-            <p class="mb-3 font-mono text-sm text-neon">{group}</p>
+          <div class="card p-5">
+            <p class="mb-3 font-serif font-semibold text-ink2">{group}</p>
             <div class="flex flex-wrap gap-2">
               {items.map((s) => (
-                <span class="rounded-sm border border-edge bg-ink px-2.5 py-1 font-mono text-xs text-mute">{s}</span>
+                <span class="rounded-full border border-line bg-paper px-2.5 py-1 font-mono text-xs text-mute">{s}</span>
               ))}
             </div>
           </div>
@@ -224,33 +228,51 @@ const nav = [
       </div>
     </section>
 
+    <!-- ── off the clock ────────────────────────────────────────────── -->
+    <section id="offclock" class="reveal scroll-mt-20 py-14">
+      <p class="label mb-2">06 · Off the clock</p>
+      <h2 class="mb-3 font-serif text-3xl font-bold text-ink2">Not everything is a pipeline</h2>
+      <p class="mb-8 max-w-2xl leading-relaxed text-mute">
+        The parts of the week that don't compile.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {hobbies.map((h) => (
+          <div class="card rotate-[-0.4deg] p-6 odd:rotate-[0.4deg]">
+            <p class="text-2xl">{h.icon}</p>
+            <p class="mt-2 font-serif text-xl font-semibold text-ink2">{h.title}</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute">{h.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
     <!-- ── contact ──────────────────────────────────────────────────── -->
     <section id="contact" class="reveal scroll-mt-20 py-16">
-      <div class="rounded-lg border border-edge bg-panel px-6 py-12 text-center">
-        <p class="font-mono text-sm text-dim">// open to interesting problems</p>
-        <h2 class="mt-3 text-3xl font-bold text-fg">Let's build something.</h2>
-        <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-mute">
+      <div class="card px-6 py-12 text-center">
+        <p class="label">Open to interesting problems</p>
+        <h2 class="mt-3 font-serif text-4xl font-bold text-ink2">Let's build something.</h2>
+        <p class="mx-auto mt-3 max-w-md leading-relaxed text-mute">
           Agentic systems, LLM applications, ML infrastructure — if it's hard and it matters, I'm interested.
         </p>
-        <div class="mt-7 flex flex-wrap justify-center gap-3 font-mono text-sm">
-          <a href={`mailto:${profile.email}`} class="rounded border border-neon/40 bg-neon/10 px-5 py-2 text-neon transition hover:bg-neon/20">
-            email me ▸
+        <div class="mt-7 flex flex-wrap justify-center gap-3 text-sm">
+          <a href={`mailto:${profile.email}`} class="rounded-md bg-accent px-5 py-2.5 font-medium text-card shadow-sm transition hover:bg-accent-deep">
+            Email me
           </a>
-          <a href={profile.linkedin} target="_blank" rel="noreferrer" class="rounded border border-edge-2 px-5 py-2 text-mute transition hover:border-neon/40 hover:text-neon">
-            linkedin ↗
+          <a href={profile.linkedin} target="_blank" rel="noreferrer" class="rounded-md border border-line-2 bg-card px-5 py-2.5 font-medium text-ink2 transition hover:border-accent hover:text-accent">
+            LinkedIn ↗
           </a>
-          <a href={profile.medium} target="_blank" rel="noreferrer" class="rounded border border-edge-2 px-5 py-2 text-mute transition hover:border-neon/40 hover:text-neon">
-            medium ↗
+          <a href={profile.medium} target="_blank" rel="noreferrer" class="rounded-md border border-line-2 bg-card px-5 py-2.5 font-medium text-ink2 transition hover:border-accent hover:text-accent">
+            Medium ↗
           </a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="border-t border-edge py-8">
-    <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-5 font-mono text-xs text-dim">
-      <p>© {new Date().getFullYear()} {profile.name} · built with Astro, deployed on GitHub Pages</p>
-      <p><span class="text-neon">▊</span> exit code 0</p>
+  <footer class="border-t border-line py-8">
+    <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-5 text-xs text-faint">
+      <p>© {new Date().getFullYear()} {profile.name} · designed & built by me (with a lot of coffee)</p>
+      <p class="font-serif italic">Los Angeles, CA</p>
     </div>
   </footer>
 </Base>

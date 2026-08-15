@@ -23,10 +23,9 @@ src/
   data/site.ts             ← all content
   layouts/Base.astro       ← head, SEO, JSON-LD
   components/
-    Terminal.astro         ← interactive hero terminal
-    SamplingDemo.astro     ← next-token sampling playground
+    Flagship.astro         ← flagship case-study card
   pages/index.astro        ← the page
-  styles/global.css        ← design tokens + theme
+  styles/global.css        ← design tokens ("engineer's notebook" theme)
 ```
 
 ## Hosting portability
