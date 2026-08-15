@@ -1,0 +1,215 @@
+---
+import Base from '../layouts/Base.astro';
+import Terminal from '../components/Terminal.astro';
+import SamplingDemo from '../components/SamplingDemo.astro';
+import { profile, projects, roles, skills, whatIDo } from '../data/site';
+
+const featured = projects.filter((p) => p.featured);
+const more = projects.filter((p) => !p.featured);
+const nav = [
+  ['work', '#work'],
+  ['playground', '#playground'],
+  ['experience', '#experience'],
+  ['contact', '#contact'],
+] as const;
+---
+
+<Base>
+  <div class="grid-bg pointer-events-none absolute inset-x-0 top-0 h-[720px]"></div>
+
+  <header class="sticky top-0 z-50 border-b border-edge/70 bg-ink/80 backdrop-blur-md">
+    <nav class="mx-auto flex max-w-5xl items-center justify-between px-5 py-3.5 font-mono text-sm">
+      <a href="#" class="text-fg transition hover:text-neon">
+        <span class="text-neon">~</span>/{profile.handle}
+      </a>
+      <div class="flex items-center gap-5">
+        {nav.map(([label, href]) => (
+          <a href={href} class="hidden text-mute transition hover:text-neon sm:block">
+            <span class="text-dim">./</span>{label}
+          </a>
+        ))}
+        <a
+          href={profile.github}
+          target="_blank"
+          rel="noreferrer"
+          class="rounded border border-edge-2 px-3 py-1 text-mute transition hover:border-neon/50 hover:text-neon"
+        >github ↗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="relative mx-auto max-w-5xl px-5">
+    <!-- ── hero ─────────────────────────────────────────────────────── -->
+    <section class="grid items-center gap-10 py-16 md:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <div>
+        <p class="mb-4 font-mono text-sm text-neon">
+          <span class="text-dim">$</span> initializing…
+        </p>
+        <h1 class="text-4xl font-bold tracking-tight text-fg md:text-5xl">
+          {profile.name}
+        </h1>
+        <p class="mt-2 font-mono text-lg text-neon glow md:text-xl">{profile.title}</p>
+        <p class="mt-5 max-w-md leading-relaxed text-mute">{profile.tagline}</p>
+        <div class="mt-7 flex flex-wrap gap-3 font-mono text-sm">
+          <a href="#work" class="rounded border border-neon/40 bg-neon/10 px-4 py-2 text-neon transition hover:bg-neon/20">
+            view work ▸
+          </a>
+          <a href={`mailto:${profile.email}`} class="rounded border border-edge-2 px-4 py-2 text-mute transition hover:border-neon/40 hover:text-neon">
+            contact
+          </a>
+        </div>
+        <p class="mt-8 font-mono text-xs text-dim">
+          {profile.location} · MS Applied Data Science @ USC
+        </p>
+      </div>
+      <Terminal />
+    </section>
+
+    <!-- ── what i do ────────────────────────────────────────────────── -->
+    <section class="reveal py-14">
+      <h2 class="mb-8 font-mono text-xl text-fg">
+        <span class="text-dim">01</span> <span class="text-neon">/</span> what_i_do
+      </h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {whatIDo.map((w) => (
+          <div class="group rounded-lg border border-edge bg-panel p-5 transition hover:border-edge-2 hover:bg-panel-2">
+            <p class="font-mono text-neon">{w.icon} <span class="ml-1 text-fg">{w.title}</span></p>
+            <p class="mt-2 text-sm leading-relaxed text-mute">{w.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── work ─────────────────────────────────────────────────────── -->
+    <section id="work" class="reveal scroll-mt-20 py-14">
+      <h2 class="mb-8 font-mono text-xl text-fg">
+        <span class="text-dim">02</span> <span class="text-neon">/</span> selected_work
+      </h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {featured.map((p) => (
+          <a
+            href={p.repo}
+            target="_blank"
+            rel="noreferrer"
+            class="group flex flex-col rounded-lg border border-edge bg-panel p-6 transition hover:-translate-y-0.5 hover:border-neon/40 hover:shadow-[0_0_40px_-18px_rgb(61_220_132/0.4)]"
+          >
+            <div class="flex items-baseline justify-between gap-3">
+              <h3 class="font-mono text-fg transition group-hover:text-neon">{p.name}</h3>
+              <span class="font-mono text-xs text-dim transition group-hover:text-neon">↗</span>
+            </div>
+            <p class="mt-3 grow text-sm leading-relaxed text-mute">{p.blurb}</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              {p.stack.map((s) => (
+                <span class="rounded-sm border border-edge px-2 py-0.5 font-mono text-[11px] text-dim">{s}</span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+      <details class="mt-6 group">
+        <summary class="cursor-pointer list-none font-mono text-sm text-dim transition hover:text-neon">
+          <span class="inline-block transition group-open:rotate-90">▸</span> more projects ({more.length})
+        </summary>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+          {more.map((p) => (
+            <a
+              href={p.repo}
+              target="_blank"
+              rel="noreferrer"
+              class="group/c rounded-lg border border-edge bg-panel px-5 py-4 transition hover:border-edge-2"
+            >
+              <p class="font-mono text-sm text-fg transition group-hover/c:text-neon">{p.name} <span class="text-dim">↗</span></p>
+              <p class="mt-1.5 text-[13px] leading-relaxed text-mute">{p.blurb}</p>
+            </a>
+          ))}
+        </div>
+      </details>
+    </section>
+
+    <!-- ── playground ───────────────────────────────────────────────── -->
+    <section id="playground" class="reveal scroll-mt-20 py-14">
+      <h2 class="mb-2 font-mono text-xl text-fg">
+        <span class="text-dim">03</span> <span class="text-neon">/</span> playground
+      </h2>
+      <p class="mb-8 max-w-2xl text-sm leading-relaxed text-mute">
+        A tiny language model running in your browser. Steer its decoding with temperature and
+        top-k, and watch the probability mass move — the same knobs that shape every LLM you talk to.
+      </p>
+      <SamplingDemo />
+    </section>
+
+    <!-- ── experience ───────────────────────────────────────────────── -->
+    <section id="experience" class="reveal scroll-mt-20 py-14">
+      <h2 class="mb-8 font-mono text-xl text-fg">
+        <span class="text-dim">04</span> <span class="text-neon">/</span> experience
+      </h2>
+      <div class="relative flex flex-col gap-8 border-l border-edge pl-7">
+        {roles.map((r) => (
+          <div class="relative">
+            <span class="absolute -left-[33px] top-1.5 size-3 rounded-full border-2 border-neon bg-ink"></span>
+            <div class="flex flex-wrap items-baseline gap-x-3">
+              <h3 class="font-mono text-fg">{r.title}</h3>
+              <span class="font-mono text-xs text-dim">{r.period}</span>
+            </div>
+            <p class="mt-0.5 text-sm text-neon/80">{r.org}</p>
+            <ul class="mt-2 flex flex-col gap-1">
+              {r.points.map((pt) => (
+                <li class="text-sm leading-relaxed text-mute">
+                  <span class="mr-2 text-dim">▸</span>{pt}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── stack ────────────────────────────────────────────────────── -->
+    <section class="reveal py-14">
+      <h2 class="mb-8 font-mono text-xl text-fg">
+        <span class="text-dim">05</span> <span class="text-neon">/</span> stack
+      </h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {Object.entries(skills).map(([group, items]) => (
+          <div class="rounded-lg border border-edge bg-panel p-5">
+            <p class="mb-3 font-mono text-sm text-neon">{group}</p>
+            <div class="flex flex-wrap gap-2">
+              {items.map((s) => (
+                <span class="rounded-sm border border-edge bg-ink px-2.5 py-1 font-mono text-xs text-mute">{s}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── contact ──────────────────────────────────────────────────── -->
+    <section id="contact" class="reveal scroll-mt-20 py-16">
+      <div class="rounded-lg border border-edge bg-panel px-6 py-12 text-center">
+        <p class="font-mono text-sm text-dim">// open to interesting problems</p>
+        <h2 class="mt-3 text-3xl font-bold text-fg">Let's build something.</h2>
+        <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-mute">
+          Agentic systems, LLM applications, ML infrastructure — if it's hard and it matters, I'm interested.
+        </p>
+        <div class="mt-7 flex flex-wrap justify-center gap-3 font-mono text-sm">
+          <a href={`mailto:${profile.email}`} class="rounded border border-neon/40 bg-neon/10 px-5 py-2 text-neon transition hover:bg-neon/20">
+            email me ▸
+          </a>
+          <a href={profile.linkedin} target="_blank" rel="noreferrer" class="rounded border border-edge-2 px-5 py-2 text-mute transition hover:border-neon/40 hover:text-neon">
+            linkedin ↗
+          </a>
+          <a href={profile.medium} target="_blank" rel="noreferrer" class="rounded border border-edge-2 px-5 py-2 text-mute transition hover:border-neon/40 hover:text-neon">
+            medium ↗
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-edge py-8">
+    <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-5 font-mono text-xs text-dim">
+      <p>© {new Date().getFullYear()} {profile.name} · built with Astro, deployed on GitHub Pages</p>
+      <p><span class="text-neon">▊</span> exit code 0</p>
+    </div>
+  </footer>
+</Base>

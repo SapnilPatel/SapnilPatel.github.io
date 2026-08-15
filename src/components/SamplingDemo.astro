@@ -1,0 +1,170 @@
+---
+// Next-token sampling visualizer — a tiny hand-built language model whose
+// decoding you can steer with temperature and top-k, live.
+---
+
+<div class="grid gap-6 lg:grid-cols-[1fr_minmax(0,1.15fr)]">
+  <div class="rounded-lg border border-edge bg-panel p-5">
+    <p class="mb-4 font-mono text-xs text-dim">// controls</p>
+
+    <label class="mb-1 flex items-baseline justify-between font-mono text-sm">
+      <span class="text-mute">temperature</span>
+      <span id="t-val" class="text-neon">0.8</span>
+    </label>
+    <input id="t-slider" type="range" min="0.1" max="2" step="0.05" value="0.8"
+      class="mb-5 w-full accent-[var(--color-neon)]" aria-label="temperature" />
+
+    <label class="mb-1 flex items-baseline justify-between font-mono text-sm">
+      <span class="text-mute">top-k</span>
+      <span id="k-val" class="text-neon">8</span>
+    </label>
+    <input id="k-slider" type="range" min="1" max="8" step="1" value="8"
+      class="mb-6 w-full accent-[var(--color-neon)]" aria-label="top-k" />
+
+    <div class="flex flex-wrap gap-2 font-mono text-sm">
+      <button id="btn-sample"
+        class="rounded border border-neon/40 bg-neon/10 px-4 py-1.5 text-neon transition hover:bg-neon/20">
+        sample next ▸
+      </button>
+      <button id="btn-gen"
+        class="rounded border border-edge-2 px-4 py-1.5 text-mute transition hover:border-neon/40 hover:text-neon">
+        autocomplete
+      </button>
+      <button id="btn-reset"
+        class="rounded border border-edge px-4 py-1.5 text-dim transition hover:text-mute">
+        reset
+      </button>
+    </div>
+
+    <p class="mt-5 border-t border-edge pt-4 text-sm leading-relaxed text-mute">
+      Low temperature sharpens the distribution toward the argmax; high temperature flattens
+      it toward uniform. <span class="font-mono text-fg">top-k</span> truncates the tail before
+      renormalizing. Watch the bars — then sample and see decoding actually walk the graph.
+    </p>
+  </div>
+
+  <div class="flex flex-col gap-4">
+    <div class="rounded-lg border border-edge bg-panel p-5 font-mono text-sm">
+      <p class="mb-2 text-xs text-dim">// context</p>
+      <p class="leading-relaxed">
+        <span id="ctx" class="text-fg"></span><span class="cursor-blink text-neon">▊</span>
+      </p>
+    </div>
+    <div class="grow rounded-lg border border-edge bg-panel p-5">
+      <p class="mb-3 font-mono text-xs text-dim">// P(next token) after temperature + top-k</p>
+      <div id="bars" class="flex flex-col gap-1.5 font-mono text-[13px]"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── a tiny hand-built bigram LM over an AI-flavored vocabulary ──────────
+  type Dist = [string, number][]; // [token, logit]
+  const LM: Record<string, Dist> = {
+    __start__: [['The', 2.2], ['A', 1.4], ['Every', 0.6], ['My', 0.9], ['This', 1.0], ['One', 0.3], ['No', -0.4], ['Some', 0.1]],
+    The: [['model', 2.4], ['agent', 2.0], ['pipeline', 1.2], ['data', 1.0], ['GPU', 0.7], ['loss', 0.4], ['gradient', 0.2], ['human', -0.2]],
+    A: [['model', 1.8], ['transformer', 2.1], ['pipeline', 1.1], ['GPU', 0.9], ['dataset', 1.0], ['bug', 0.3], ['human', 0.2], ['loss', -0.1]],
+    Every: [['model', 1.9], ['agent', 1.7], ['engineer', 1.5], ['pipeline', 0.8], ['dataset', 0.6], ['GPU', 0.4], ['gradient', 0.1], ['bug', 0.5]],
+    My: [['model', 1.6], ['agent', 1.8], ['pipeline', 1.3], ['GPU', 1.0], ['dataset', 0.7], ['loss', 0.5], ['bug', 0.6], ['gradient', -0.2]],
+    This: [['model', 2.0], ['agent', 1.6], ['pipeline', 1.4], ['dataset', 0.8], ['GPU', 0.6], ['loss', 0.3], ['bug', 0.7], ['gradient', 0.0]],
+    One: [['model', 1.5], ['agent', 1.4], ['GPU', 1.1], ['engineer', 1.2], ['dataset', 0.5], ['bug', 0.8], ['gradient', 0.2], ['loss', 0.1]],
+    No: [['model', 1.2], ['agent', 1.0], ['GPU', 1.4], ['engineer', 1.1], ['dataset', 0.6], ['bug', 1.3], ['gradient', 0.3], ['loss', 0.9]],
+    Some: [['model', 1.3], ['agent', 1.2], ['pipeline', 1.0], ['dataset', 1.1], ['GPU', 0.7], ['bug', 0.9], ['gradient', 0.4], ['loss', 0.5]],
+    model: [['learns', 2.2], ['converges', 1.6], ['overfits', 1.3], ['reasons', 1.1], ['ships', 0.9], ['hallucinates', 1.4], ['scales', 0.8], ['fails', 0.4]],
+    transformer: [['learns', 2.0], ['attends', 2.3], ['scales', 1.4], ['converges', 1.0], ['overfits', 0.8], ['reasons', 0.9], ['ships', 0.5], ['fails', 0.2]],
+    agent: [['reasons', 2.3], ['plans', 1.9], ['learns', 1.3], ['ships', 1.0], ['hallucinates', 1.2], ['converges', 0.4], ['scales', 0.6], ['fails', 0.5]],
+    pipeline: [['ships', 2.1], ['scales', 1.7], ['converges', 0.9], ['fails', 1.1], ['learns', 0.5], ['runs', 1.8], ['overfits', 0.2], ['reasons', -0.3]],
+    data: [['scales', 1.6], ['ships', 1.0], ['converges', 0.7], ['fails', 0.8], ['learns', 0.4], ['runs', 1.2], ['overfits', 0.9], ['hallucinates', 0.3]],
+    GPU: [['runs', 2.2], ['scales', 1.5], ['fails', 1.0], ['ships', 0.7], ['converges', 0.5], ['learns', 0.2], ['overfits', -0.1], ['burns', 1.7]],
+    loss: [['converges', 2.4], ['fails', 1.0], ['scales', 0.6], ['learns', 0.3], ['runs', 0.2], ['ships', -0.2], ['overfits', 0.8], ['hallucinates', 0.1]],
+    gradient: [['converges', 2.1], ['fails', 1.2], ['scales', 0.9], ['runs', 0.7], ['learns', 0.6], ['ships', 0.1], ['overfits', 0.4], ['burns', 0.3]],
+    human: [['reasons', 1.9], ['learns', 1.7], ['plans', 1.4], ['ships', 1.0], ['fails', 0.9], ['hallucinates', 0.6], ['converges', 0.1], ['scales', -0.2]],
+    engineer: [['ships', 2.3], ['reasons', 1.5], ['plans', 1.6], ['learns', 1.2], ['fails', 0.8], ['scales', 0.6], ['converges', 0.3], ['hallucinates', 0.4]],
+    dataset: [['scales', 1.8], ['ships', 1.1], ['fails', 0.9], ['learns', 0.5], ['runs', 0.8], ['converges', 0.6], ['overfits', 1.3], ['hallucinates', 0.2]],
+    bug: [['ships', 1.9], ['fails', 1.4], ['runs', 1.1], ['scales', 0.5], ['learns', 0.3], ['converges', 0.2], ['hallucinates', 0.8], ['burns', 0.6]],
+    __verb__: [['quietly.', 1.8], ['in production.', 2.2], ['at scale.', 1.9], ['on Fridays.', 1.2], ['eventually.', 1.5], ['beautifully.', 1.3], ['without tests.', 0.9], ['anyway.', 1.4]],
+  };
+  const VERBS = new Set(['learns', 'converges', 'overfits', 'reasons', 'ships', 'hallucinates', 'scales', 'fails', 'runs', 'plans', 'attends', 'burns']);
+
+  let ctx: string[] = [];
+  let temp = 0.8;
+  let topk = 8;
+
+  const $ = (id: string) => document.getElementById(id)!;
+  const barsEl = $('bars'), ctxEl = $('ctx');
+
+  const distFor = (): Dist => {
+    const last = ctx[ctx.length - 1];
+    if (!last) return LM.__start__;
+    if (VERBS.has(last)) return LM.__verb__;
+    return LM[last] ?? LM.__verb__;
+  };
+
+  function probs(): { tok: string; p: number; kept: boolean }[] {
+    const d = [...distFor()].sort((a, b) => b[1] - a[1]);
+    const scaled = d.map(([t, l]) => [t, l / temp] as const);
+    const m = Math.max(...scaled.map(([, l]) => l));
+    const exps = scaled.map(([t, l]) => [t, Math.exp(l - m)] as const);
+    const kept = exps.slice(0, topk);
+    const Z = kept.reduce((s, [, e]) => s + e, 0);
+    return exps.map(([t, e], i) => ({ tok: t, p: i < topk ? e / Z : 0, kept: i < topk }));
+  }
+
+  function render(highlight?: string) {
+    ctxEl.textContent = ctx.length ? ctx.join(' ') + ' ' : '';
+    barsEl.innerHTML = '';
+    for (const { tok, p, kept } of probs()) {
+      const row = document.createElement('div');
+      row.className = 'flex items-center gap-3';
+      const isHit = tok === highlight;
+      row.innerHTML = `
+        <span class="w-28 shrink-0 truncate text-right ${kept ? 'text-fg' : 'text-dim line-through'}">${tok}</span>
+        <div class="h-4 grow overflow-hidden rounded-sm bg-[var(--color-edge)]/60">
+          <div class="h-full rounded-sm transition-all duration-300 ${isHit ? 'bg-[var(--color-amber)]' : 'bg-[var(--color-neon)]/70'}"
+               style="width:${(p * 100).toFixed(1)}%"></div>
+        </div>
+        <span class="w-14 shrink-0 tabular-nums ${kept ? 'text-mute' : 'text-dim'}">${(p * 100).toFixed(1)}%</span>`;
+      barsEl.appendChild(row);
+    }
+  }
+
+  function sampleOnce(): string {
+    const ps = probs().filter((x) => x.kept);
+    let r = Math.random();
+    let pick = ps[ps.length - 1].tok;
+    for (const { tok, p } of ps) { r -= p; if (r <= 0) { pick = tok; break; } }
+    render(pick);
+    ctx.push(pick);
+    ctxEl.textContent = ctx.join(' ') + ' ';
+    return pick;
+  }
+
+  const ended = () => /[.]$/.test(ctx[ctx.length - 1] ?? '');
+
+  $('t-slider').addEventListener('input', (e) => {
+    temp = parseFloat((e.target as HTMLInputElement).value);
+    $('t-val').textContent = temp.toFixed(2);
+    render();
+  });
+  $('k-slider').addEventListener('input', (e) => {
+    topk = parseInt((e.target as HTMLInputElement).value);
+    $('k-val').textContent = String(topk);
+    render();
+  });
+  $('btn-sample').addEventListener('click', () => {
+    if (ended()) ctx = [];
+    sampleOnce();
+    setTimeout(() => render(), 350);
+  });
+  $('btn-gen').addEventListener('click', async () => {
+    if (ended()) ctx = [];
+    for (let i = 0; i < 12 && !ended(); i++) {
+      sampleOnce();
+      await new Promise((r) => setTimeout(r, 380));
+      render();
+    }
+  });
+  $('btn-reset').addEventListener('click', () => { ctx = []; render(); });
+
+  render();
+</script>

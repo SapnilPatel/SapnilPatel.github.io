@@ -1,0 +1,188 @@
+---
+// Interactive hero terminal. Real commands, real output.
+import { profile, projects, skills, roles } from '../data/site';
+
+const payload = {
+  name: profile.name,
+  title: profile.title,
+  location: profile.location,
+  email: profile.email,
+  github: profile.github,
+  linkedin: profile.linkedin,
+  medium: profile.medium,
+  projects: projects.map((p) => ({ name: p.name, repo: p.repo, blurb: p.blurb })),
+  skills,
+  roles: roles.map((r) => `${r.title} — ${r.org}`),
+};
+---
+
+<div
+  id="terminal"
+  class="w-full rounded-lg border border-edge bg-panel/90 font-mono text-[13px] leading-relaxed shadow-[0_0_60px_-15px_rgb(61_220_132/0.15)] backdrop-blur"
+  data-payload={JSON.stringify(payload)}
+>
+  <div class="flex items-center gap-2 border-b border-edge px-4 py-2.5">
+    <span class="size-3 rounded-full bg-[#ff5f57]"></span>
+    <span class="size-3 rounded-full bg-[#febc2e]"></span>
+    <span class="size-3 rounded-full bg-[#28c840]"></span>
+    <span class="ml-3 text-xs text-dim">sapnil@ai-engineer — zsh</span>
+  </div>
+  <div
+    id="term-body"
+    class="h-105 cursor-text overflow-y-auto px-4 py-3 [scrollbar-color:var(--color-edge-2)_transparent] [scrollbar-width:thin]"
+  >
+    <div id="term-out"></div>
+    <div class="flex items-center gap-2">
+      <span class="shrink-0 text-amber">❯</span>
+      <input
+        id="term-in"
+        class="w-full bg-transparent text-fg caret-neon outline-none placeholder:text-dim"
+        type="text"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="Terminal input — type 'help' for commands"
+        placeholder="type 'help' and hit enter…"
+      />
+    </div>
+  </div>
+</div>
+
+<script>
+  const root = document.getElementById('terminal')!;
+  const data = JSON.parse(root.dataset.payload!);
+  const out = document.getElementById('term-out')!;
+  const input = document.getElementById('term-in') as HTMLInputElement;
+  const body = document.getElementById('term-body')!;
+
+  const NEON = 'color:var(--color-neon)';
+  const BLUE = 'color:var(--color-neon-2)';
+  const MUTE = 'color:var(--color-mute)';
+
+  function line(html = '') {
+    const div = document.createElement('div');
+    div.className = 'whitespace-pre-wrap break-words';
+    div.innerHTML = html || '&nbsp;';
+    out.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+  }
+  const esc = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const link = (href: string, label?: string) =>
+    `<a href="${href}" target="_blank" rel="noreferrer" class="underline decoration-dotted underline-offset-4 hover:text-[var(--color-neon)]" style="${BLUE}">${label ?? href}</a>`;
+
+  const commands: Record<string, { desc: string; run: (arg: string) => void }> = {
+    help: {
+      desc: 'list available commands',
+      run: () => {
+        line(`<span style="${MUTE}">available commands:</span>`);
+        for (const [name, c] of Object.entries(commands))
+          line(`  <span style="${NEON}">${name.padEnd(10)}</span><span style="${MUTE}">${c.desc}</span>`);
+      },
+    },
+    whoami: {
+      desc: 'who is this guy',
+      run: () => {
+        line(`<span style="${NEON}">${data.name}</span> — ${data.title}`);
+        line(`<span style="${MUTE}">${data.location} · MS Applied Data Science @ USC</span>`);
+        for (const r of data.roles) line(`<span style="${MUTE}">· ${esc(r)}</span>`);
+      },
+    },
+    projects: {
+      desc: 'featured work',
+      run: () => {
+        for (const p of data.projects) {
+          line(`<span style="${NEON}">▸ ${esc(p.name)}</span>  ${link(p.repo, '[repo]')}`);
+          line(`  <span style="${MUTE}">${esc(p.blurb)}</span>`);
+        }
+        line(`<span style="${MUTE}">tip: open &lt;name&gt; jumps to the repo</span>`);
+      },
+    },
+    stack: {
+      desc: 'tools of the trade',
+      run: () => {
+        for (const [group, items] of Object.entries(data.skills))
+          line(`<span style="${NEON}">${esc(group)}:</span> <span style="${MUTE}">${(items as string[]).join(' · ')}</span>`);
+      },
+    },
+    contact: {
+      desc: 'get in touch',
+      run: () => {
+        line(`email    ${link(`mailto:${data.email}`, data.email)}`);
+        line(`github   ${link(data.github)}`);
+        line(`linkedin ${link(data.linkedin)}`);
+        line(`medium   ${link(data.medium)}`);
+      },
+    },
+    open: {
+      desc: 'open <project> on GitHub',
+      run: (arg) => {
+        if (!arg) return line(`<span style="${MUTE}">usage: open &lt;project name&gt;</span>`);
+        const q = arg.toLowerCase();
+        const hit = data.projects.find((p: any) => p.name.toLowerCase().includes(q));
+        if (hit) {
+          line(`<span style="${MUTE}">opening ${esc(hit.name)}…</span>`);
+          window.open(hit.repo, '_blank', 'noopener');
+        } else line(`<span style="${MUTE}">no project matching '${esc(arg)}'</span>`);
+      },
+    },
+    clear: { desc: 'clear the screen', run: () => (out.innerHTML = '') },
+  };
+
+  const history: string[] = [];
+  let hIdx = -1;
+
+  function exec(raw: string) {
+    const [cmd = '', ...rest] = raw.trim().split(/\s+/);
+    line(`<span style="color:var(--color-amber)">❯</span> ${esc(raw)}`);
+    if (!cmd) return;
+    const c = commands[cmd.toLowerCase()];
+    if (c) c.run(rest.join(' '));
+    else line(`<span style="${MUTE}">command not found: ${esc(cmd)} — try 'help'</span>`);
+    line();
+  }
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const v = input.value;
+      if (v.trim()) {
+        history.push(v);
+        hIdx = history.length;
+      }
+      input.value = '';
+      exec(v);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (hIdx > 0) input.value = history[--hIdx] ?? '';
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (hIdx < history.length - 1) input.value = history[++hIdx] ?? '';
+      else { hIdx = history.length; input.value = ''; }
+    }
+  });
+  body.addEventListener('click', () => input.focus());
+
+  // boot sequence — typed out, then hands over the prompt
+  const boot = [
+    { t: `<span style="${MUTE}"># welcome — this terminal is real. try it.</span>`, d: 20 },
+    { t: `<span style="color:var(--color-amber)">❯</span> whoami`, d: 45 },
+  ];
+  (async () => {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for (const b of boot) {
+      if (reduce) { line(b.t); continue; }
+      const div = document.createElement('div');
+      div.className = 'whitespace-pre-wrap';
+      out.appendChild(div);
+      // type by rendering progressively larger HTML slices is unsafe; type plain then swap
+      const plain = b.t.replace(/<[^>]+>/g, '');
+      for (let i = 1; i <= plain.length; i++) {
+        div.textContent = plain.slice(0, i);
+        await new Promise((r) => setTimeout(r, b.d));
+      }
+      div.innerHTML = b.t;
+    }
+    commands.whoami.run('');
+    line();
+  })();
+</script>

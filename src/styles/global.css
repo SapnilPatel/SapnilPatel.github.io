@@ -1,0 +1,75 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', monospace;
+
+  --color-ink: #0a0e14;          /* page background */
+  --color-panel: #0d131c;        /* raised surfaces */
+  --color-panel-2: #111926;      /* hover surfaces */
+  --color-edge: #1b2534;         /* borders */
+  --color-edge-2: #263349;       /* hover borders */
+  --color-fg: #d6e2f0;           /* primary text */
+  --color-mute: #7d8ca1;         /* secondary text */
+  --color-dim: #4c5a70;          /* tertiary text */
+  --color-neon: #3ddc84;         /* terminal green */
+  --color-neon-2: #56b4ff;       /* signal blue */
+  --color-amber: #ffc46b;        /* prompt amber */
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-ink);
+}
+
+body {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgb(61 220 132 / 0.06), transparent),
+    var(--color-ink);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgb(61 220 132 / 0.25);
+}
+
+/* faint blueprint grid behind everything */
+.grid-bg {
+  background-image:
+    linear-gradient(rgb(125 140 161 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(125 140 161 / 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+}
+
+/* accent glow used sparingly */
+.glow {
+  text-shadow: 0 0 18px rgb(61 220 132 / 0.45);
+}
+
+.cursor-blink {
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* reveal-on-scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .cursor-blink { animation: none; }
+  html { scroll-behavior: auto; }
+}
