@@ -45,27 +45,28 @@ export const flagships = [
   },
   {
     tag: 'SDE · Systems',
-    name: 'epoll-httpd',
-    repo: 'https://github.com/SapnilPatel/epoll-httpd',
-    oneLiner: 'A multithreaded HTTP/1.1 server written from scratch in C++17 that beats nginx on small-payload throughput.',
-    problem: 'Frameworks hide where HTTP performance actually comes from. Building on raw epoll, SO_REUSEPORT, and sendfile — no dependencies beyond libc and pthreads — exposes every microsecond.',
+    name: 'minisearch',
+    repo: 'https://github.com/SapnilPatel/minisearch',
+    oneLiner: 'A search engine built from first principles — crawler, index, and ranker — answering queries in milliseconds, with the performance numbers to prove it.',
+    problem: 'Search frameworks hide the interesting parts. Building the whole pipeline from scratch — crawling, deduplication, indexing, BM25 ranking — exposes every data-structure and memory trade-off that makes real search engines fast.',
     approach: [
-      'Event-driven core on epoll with SO_REUSEPORT worker sharding',
-      'Zero-copy responses via sendfile',
-      'Benchmarked honestly against nginx: matched config, pinned cores, published methodology and run-to-run variance',
+      'Positional inverted index with sorted posting-list intersection, phrase matching, and bounded min-heap top-K selection',
+      'Parallel async crawl pipeline: bounded worker pools, backpressure, a priority frontier enforcing per-host politeness, graceful shutdown',
+      'From-scratch bloom filter for URL dedup — measured 1.02% false-positive rate, within 2% of theory',
+      '215 tests passing in CI',
     ],
     metrics: [
-      { value: '~150k', label: 'requests/sec (1 KB, 2-core Xeon)' },
-      { value: '1.6×', label: 'nginx throughput, same hardware' },
-      { value: '<½', label: 'the resident memory (5 MB vs 10 MB)' },
+      { value: '1–13ms', label: 'p50 query latency (BM25, 20K docs)' },
+      { value: '7,400', label: 'pages/sec crawl @ 40 MB peak memory' },
+      { value: '99×', label: 'less URL-dedup memory vs a hash set' },
     ],
-    architecture: `        :8080  (SO_REUSEPORT)
-   ┌──────────┴──────────┐
- worker 0    …    worker N        each: epoll loop
-   │                    │         parse ▸ route ▸ sendfile
-   └── zero-copy responses ──▶ kernel copy path`,
-    stack: ['C++17', 'epoll', 'sendfile', 'pthreads', 'wrk'],
-    note: 'At 64 KB payloads both servers hit the kernel copy path — knowing where your bottleneck moves is the whole game.',
+    architecture: `seeds ─▶ frontier (per-host politeness) ─▶ async fetchers (bounded pool)
+             ▲                                  │
+       bloom-filter dedup ◀── links ─── parser ─▶ positional inverted index
+                                                      │
+query ─▶ tokenize ─▶ posting-list intersection ─▶ BM25 ─▶ top-K heap`,
+    stack: ['Python', 'asyncio', 'BM25', 'REST API', 'Prometheus'],
+    note: 'Inverting the question — look up the word, not the page — is the one trick that makes every search engine fast.',
   },
 ];
 
@@ -140,11 +141,11 @@ export const projects = [
     featured: true,
   },
   {
-    name: 'minisearch',
-    repo: 'https://github.com/SapnilPatel/minisearch',
+    name: 'epoll-httpd',
+    repo: 'https://github.com/SapnilPatel/epoll-httpd',
     blurb:
-      'A search engine from first principles: BM25 queries at 1–13 ms p50 over 20K docs, 7,400 pages/sec crawl at 40 MB peak memory, and a from-scratch bloom filter cutting URL-dedup memory 99× (measured 1.02% false-positive rate, within 2% of theory). 215 tests.',
-    stack: ['Python', 'BM25', 'Bloom Filter', 'Async Crawling'],
+      'A multithreaded HTTP/1.1 server from scratch in C++17 on raw epoll, SO_REUSEPORT, and sendfile — ~150k req/s on a 2-core Xeon, 1.6× nginx throughput at under half the resident memory, with published benchmark methodology.',
+    stack: ['C++17', 'epoll', 'sendfile', 'Systems'],
     featured: true,
   },
   {
