@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Terminal from '../components/Terminal.astro';
 import Flagship from '../components/Flagship.astro';
 import SamplingDemo from '../components/SamplingDemo.astro';
-import { profile, projects, roles, skills, whatIDo, flagships } from '../data/site';
+import { profile, projects, roles, education, skills, whatIDo, flagships } from '../data/site';
 
 const featured = projects.filter((p) => p.featured);
 const more = projects.filter((p) => !p.featured);
@@ -186,6 +186,20 @@ const nav = [
                 </li>
               ))}
             </ul>
+          </div>
+        ))}
+      </div>
+
+      <h3 class="mt-12 mb-6 font-mono text-sm text-dim">// education</h3>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {education.map((e) => (
+          <div class="rounded-lg border border-edge bg-panel p-5">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-3">
+              <h4 class="font-mono text-sm text-fg">{e.degree}</h4>
+              <span class="font-mono text-xs text-dim">{e.period}</span>
+            </div>
+            <p class="mt-1 text-sm text-neon/80">{e.school}</p>
+            <p class="mt-2 text-xs leading-relaxed text-mute">{e.detail}</p>
           </div>
         ))}
       </div>

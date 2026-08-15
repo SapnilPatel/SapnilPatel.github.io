@@ -10,6 +10,7 @@ const payload = {
   github: profile.github,
   linkedin: profile.linkedin,
   medium: profile.medium,
+  resumeUrl: profile.resumeUrl,
   projects: projects.map((p) => ({ name: p.name, repo: p.repo, blurb: p.blurb })),
   skills,
   roles: roles.map((r) => `${r.title} — ${r.org}`),
@@ -112,6 +113,14 @@ const payload = {
         line(`github   ${link(data.github)}`);
         line(`linkedin ${link(data.linkedin)}`);
         line(`medium   ${link(data.medium)}`);
+      },
+    },
+    resume: {
+      desc: 'grab the résumé (PDF)',
+      run: () => {
+        if (!data.resumeUrl) return line(`<span style="${MUTE}">résumé not published yet</span>`);
+        line(`<span style="${MUTE}">fetching résumé…</span>`);
+        window.open(data.resumeUrl, '_blank', 'noopener');
       },
     },
     open: {

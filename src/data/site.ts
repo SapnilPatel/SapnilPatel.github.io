@@ -7,11 +7,11 @@ export const profile = {
   title: 'AI Engineer',
   tagline: 'I build intelligent systems that solve real-world problems — agentic AI workflows, LLM applications, and end-to-end ML pipelines that ship.',
   location: 'Los Angeles, CA',
-  email: 'temp.opsgrouppps@gmail.com',
+  email: 'sapnilku@usc.edu',
   github: 'https://github.com/SapnilPatel',
   linkedin: 'https://www.linkedin.com/in/sapnilpatel/',
   medium: 'https://medium.com/@SapnilPatel',
-  resumeUrl: '', // drop a PDF in /public and set e.g. '/resume.pdf'
+  resumeUrl: '/resume.pdf',
   // recruiter-facing availability status — shown as the green-pulse pill
   status: 'Open to full-time AI / SDE roles · graduating Dec 2026',
 };
@@ -28,8 +28,8 @@ export const flagships = [
       'Dynamic batching: concurrent requests merged into a single forward pass within a max_wait_ms window',
       'Explicit KV-cache decode loop with a memory estimator for OOM-safe admission control',
       'FP16/BF16 mixed precision with automatic CPU→FP32 fallback',
-      'Tensor parallelism across GPUs via DeepSpeed / HF Accelerate',
-      'Prometheus metrics + Grafana dashboard; Docker + Kubernetes HPA deploy',
+      'Tensor parallelism across GPUs via DeepSpeed, with async batching scheduler and admission control for backpressure',
+      'Prometheus + Grafana observability; deployed on GCP via GKE with horizontal pod autoscaling for zero-downtime serving',
     ],
     metrics: [
       { value: '2.3×', label: 'throughput vs FP32 baseline' },
@@ -40,7 +40,7 @@ export const flagships = [
                      │                   │                  │
                 /metrics           async queue +      prefill + KV-cached
                (Prometheus)       max_wait window     decode, FP16/BF16 · TP`,
-    stack: ['PyTorch', 'DeepSpeed', 'FastAPI', 'Kubernetes', 'Prometheus', 'Grafana'],
+    stack: ['PyTorch', 'DeepSpeed', 'FastAPI', 'GKE / GCP', 'Prometheus', 'Grafana'],
     note: 'Inference cost is an engineering problem, not a hardware bill you just pay.',
   },
   {
@@ -72,32 +72,45 @@ export const flagships = [
 export const roles = [
   {
     title: 'AI Automation Engineer',
-    org: 'Current role',
-    period: '2026 — present',
+    org: 'Pacific Production Services, Inc. · Los Angeles',
+    period: 'Jun 2026 — present',
     points: [
-      'Automating real-world business operations end-to-end: scheduling data → generated documents',
-      'Tested, self-verifying pipelines saving teams 40–50% of their daily workload',
-      'Human-in-the-loop design for workflows that can\'t afford silent failures',
+      'Architected concurrent, high-throughput backend microservices (Python, FastAPI) automating document parsing — saving $25,000+ annually',
+      'Automated 100% of rental-agreement generation from live scheduling data via an idempotent, unit-tested pipeline with content-hash change detection — saving $55,000+ annually',
     ],
   },
   {
-    title: 'Research Assistant',
-    org: 'USC Center for the Neuroscience of Embodied Cognition (CeNEC)',
-    period: '2025 — present',
+    title: 'AI Research Assistant',
+    org: 'USC-CeNEC Lab · Los Angeles',
+    period: 'Mar 2025 — present',
     points: [
-      'Connecting cognitive science with AI tools and methods',
-      'Brain-activity-based image reconstruction research',
+      'Engineered distributed evaluation engines benchmarking LLM outputs across 1,050+ experiments, improving throughput by 50%',
+      'Built custom Ollama inference pipelines integrating fine-tuned local models into automated agent frameworks',
     ],
   },
   {
-    title: 'MS, Applied Data Science',
-    org: 'University of Southern California',
-    period: 'graduating Dec 2026',
+    title: 'Software Developer',
+    org: 'Nivaan Infotech · Visnagar, India',
+    period: 'Jan 2024 — Oct 2024',
     points: [
-      'Research Assistant @ CeNEC alongside coursework',
-      'Core Tech Team member @DeCodeCafe, @GirlScript',
-      'Open-source contributor',
+      'Developed conversational backends over a PostgreSQL order-processing service, eliminating 1–2 hours of manual request handling daily',
+      'Deployed predictive modeling and PPO-based reinforcement learning for personalization — lifting engagement 25% under differential privacy (TensorFlow Privacy)',
     ],
+  },
+];
+
+export const education = [
+  {
+    school: 'University of Southern California',
+    degree: 'MS, Applied Data Science',
+    period: 'Jan 2025 — Dec 2026',
+    detail: 'Data Management · ML for Data Science · Predictive Analytics · Data Mining',
+  },
+  {
+    school: 'CHARUSAT University',
+    degree: 'B.Tech, Computer Engineering',
+    period: 'Oct 2020 — Apr 2024',
+    detail: 'AI · NLP · DSA · Networking · Big Data · Computer Vision · Databases',
   },
 ];
 
@@ -114,8 +127,8 @@ export const projects = [
     name: 'Silicon Validation Log-Analysis Agent',
     repo: 'https://github.com/SapnilPatel/Silicon-Validation-Log-Analysis-Agent',
     blurb:
-      'LLM agent that digs through hardware validation logs so engineers don\'t have to — retrieval, reasoning loops, and structured findings over messy real-world logs.',
-    stack: ['Agents', 'RAG', 'Python'],
+      'Multi-agent AI debug assistant (LangGraph + Pinecone RAG) automating post-silicon failure triage across 10M+ validation logs — cutting engineering debugging time 40% and surfacing 85%+ of recurring failure patterns.',
+    stack: ['LangGraph', 'Pinecone', 'RAG', 'Anomaly Detection'],
     featured: true,
   },
   {
@@ -130,8 +143,8 @@ export const projects = [
     name: 'minisearch',
     repo: 'https://github.com/SapnilPatel/minisearch',
     blurb:
-      'A search engine from first principles — polite crawler, compact dedup filter, inverted index, BM25 ranking. 215 tests, answers queries in milliseconds.',
-    stack: ['Python', 'BM25', 'Information Retrieval'],
+      'A search engine from first principles: BM25 queries at 1–13 ms p50 over 20K docs, 7,400 pages/sec crawl at 40 MB peak memory, and a from-scratch bloom filter cutting URL-dedup memory 99× (measured 1.02% false-positive rate, within 2% of theory). 215 tests.',
+    stack: ['Python', 'BM25', 'Bloom Filter', 'Async Crawling'],
     featured: true,
   },
   {
@@ -153,10 +166,11 @@ export const projects = [
 ];
 
 export const skills = {
-  'Languages & ML': ['Python', 'PyTorch', 'TensorFlow', 'Hugging Face', 'scikit-learn', 'Pandas', 'C++'],
-  'LLM Engineering': ['LoRA / QLoRA fine-tuning', 'Inference optimization', 'Agentic workflows', 'RAG', 'Evaluation'],
-  'Deployment & Infra': ['FastAPI', 'Docker', 'Kubernetes', 'AWS', 'CI/CD', 'Prometheus / Grafana'],
-  Data: ['PostgreSQL', 'MySQL', 'MongoDB'],
+  Languages: ['Python', 'C++', 'Java', 'JavaScript', 'C', 'SQL', 'Bash', 'Kotlin', 'Scala'],
+  'ML & Deep Learning': ['PyTorch', 'TensorFlow', 'Transformers', 'Hugging Face', 'DeepSpeed', 'scikit-learn', 'XGBoost', 'OpenCV'],
+  'LLM & Agents': ['LangChain', 'LangGraph', 'CrewAI', 'Ollama', 'RAG', 'Vector databases', 'LLM fine-tuning', 'Claude Code'],
+  'Backend & Systems': ['FastAPI', 'Docker', 'Kubernetes (GKE)', 'CI/CD', 'Linux', 'Prometheus / Grafana', 'pytest', 'CUDA'],
+  'Cloud & Databases': ['AWS (SageMaker, EC2, S3)', 'GCP', 'PostgreSQL', 'MongoDB', 'Redis', 'Pinecone'],
 };
 
 export const whatIDo = [
