@@ -98,6 +98,55 @@ export const roles = [
       'Deployed predictive modeling and PPO-based reinforcement learning for personalization — lifting engagement 25% under differential privacy (TensorFlow Privacy)',
     ],
   },
+  {
+    title: 'AI Engineer (Intern)',
+    org: 'CHARUSAT · Anand, India',
+    period: 'Jan 2023 — Aug 2023',
+    points: [
+      'Synthesized 5,000+ biomedical records and 50+ scholarly studies to extract predictive clinical features, revealing diagnostic patterns and high-impact risk factors for early breast cancer',
+      'Validated an ML model with scalable data pipelines — work recognized with a peer-reviewed publication',
+    ],
+    link: {
+      label: 'Published in AIP Conference Proceedings ↗',
+      url: 'https://pubs.aip.org/aip/acp/article-abstract/2965/1/020005/3302223/',
+    },
+  },
+  {
+    title: 'Python Developer (Intern)',
+    org: 'HexaCoder Technologies · Ahmedabad, India',
+    period: 'May 2022 — Jun 2022',
+    points: [
+      'Built a real-time drowsiness detector (YOLOv5) with 95% accuracy, reducing false positives by 20%',
+      'Built a GAN for handwritten-digit generation reaching 98% similarity to MNIST while cutting training time 30%; ran knowledge-sharing sessions with peers',
+    ],
+  },
+];
+
+export const volunteering = [
+  {
+    role: 'Core Tech Team Member',
+    org: 'DeCodeCafe Community',
+    period: 'Jul 2023 — May 2024',
+    body: 'Organized and managed events promoting open-source contribution, helping students take on real-world projects.',
+  },
+  {
+    role: 'Contributor',
+    org: 'GirlScript Summer of Code',
+    period: 'May 2023 — Aug 2023',
+    body: 'Open-source NLP: text-classification and preprocessing pipelines, fine-tuned language models on real-world datasets, improved documentation with mentors.',
+  },
+  {
+    role: 'Contributor',
+    org: 'Social Summer of Code',
+    period: 'Jun 2023 — Aug 2023',
+    body: 'Implemented and fine-tuned deep-learning models for an object-detection project; improved data preprocessing pipelines and model accuracy.',
+  },
+  {
+    role: 'Student Coordinator',
+    org: 'Code Unnati (SAP)',
+    period: 'Aug 2022 — Aug 2023',
+    body: 'Coordinated a cohort of 80 students; facilitated learning across ML, AI, and edge computing; mentored peers and bridged students with program mentors.',
+  },
 ];
 
 export const education = [
@@ -110,8 +159,9 @@ export const education = [
   {
     school: 'CHARUSAT University',
     degree: 'B.Tech, Computer Engineering',
-    period: 'Oct 2020 — Apr 2024',
-    detail: 'Artificial Intelligence · Natural Language Processing · Data Structures & Algorithms · Networking · Big Data Analytics · Computer Vision · Database Systems',
+    period: 'Oct 2020 — May 2024',
+    detail: 'Artificial Intelligence · Natural Language Processing · Data Structures & Algorithms · Operating Systems · Computer Networking · Computer Vision · Database Management Systems',
+    extra: '9.0 CGPA · Student Coordinator, Machine Learning Club · SAP Code Unnati · Codepie 2.0 team',
   },
 ];
 
