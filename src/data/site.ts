@@ -73,7 +73,7 @@ query ─▶ tokenize ─▶ posting-list intersection ─▶ BM25 ─▶ top-K 
 export const roles = [
   {
     title: 'AI Automation Engineer',
-    org: 'Pacific Production Services, Inc. · Los Angeles',
+    org: 'Pacific Production Services, Inc. · USA',
     period: 'Jun 2026 — present',
     points: [
       'Architected concurrent, high-throughput backend microservices (Python, FastAPI) automating document parsing — saving $25,000+ annually',
@@ -82,7 +82,7 @@ export const roles = [
   },
   {
     title: 'AI Research Assistant',
-    org: 'USC-CeNEC Lab · Los Angeles',
+    org: 'USC-CeNEC Lab · USA',
     period: 'Mar 2025 — present',
     points: [
       'Engineered distributed evaluation engines benchmarking LLM outputs across 1,050+ experiments, improving throughput by 50%',
