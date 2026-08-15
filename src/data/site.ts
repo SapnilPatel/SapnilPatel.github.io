@@ -91,7 +91,7 @@ export const roles = [
   },
   {
     title: 'Software Developer',
-    org: 'Nivaan Infotech · Visnagar, India',
+    org: 'Nivaan Infotech · India',
     period: 'Jan 2024 — Oct 2024',
     points: [
       'Developed conversational backends over a PostgreSQL order-processing service, eliminating 1–2 hours of manual request handling daily',
@@ -99,8 +99,8 @@ export const roles = [
     ],
   },
   {
-    title: 'AI Engineer (Intern)',
-    org: 'CHARUSAT · Anand, India',
+    title: 'AI Engineer',
+    org: 'CHARUSAT · India',
     period: 'Jan 2023 — Aug 2023',
     points: [
       'Synthesized 5,000+ biomedical records and 50+ scholarly studies to extract predictive clinical features, revealing diagnostic patterns and high-impact risk factors for early breast cancer',
@@ -112,8 +112,8 @@ export const roles = [
     },
   },
   {
-    title: 'Python Developer (Intern)',
-    org: 'HexaCoder Technologies · Ahmedabad, India',
+    title: 'Python Developer',
+    org: 'HexaCoder Technologies · India',
     period: 'May 2022 — Jun 2022',
     points: [
       'Built a real-time drowsiness detector (YOLOv5) with 95% accuracy, reducing false positives by 20%',
