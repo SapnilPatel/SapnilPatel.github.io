@@ -4,8 +4,8 @@
 export const profile = {
   name: 'Sapnil Patel',
   handle: 'sapnilpatel',
-  title: 'AI Engineer',
-  tagline: 'I build intelligent systems that solve real-world problems — agentic AI workflows, LLM applications, and end-to-end ML pipelines that ship.',
+  title: 'Software & AI Engineer',
+  tagline: 'I build intelligent systems and the infrastructure they run on — high-performance backends, distributed systems, agentic AI workflows, and LLM applications that ship.',
   location: 'Los Angeles, CA',
   email: 'sapnilku@usc.edu',
   github: 'https://github.com/SapnilPatel',
@@ -190,22 +190,32 @@ export const hobbies = [
 export const whatIDo = [
   {
     icon: '◆',
-    title: 'Agentic AI Systems',
-    body: 'Multi-agent workflows, reasoning loops, autonomous task execution.',
+    title: 'Backend & Distributed Systems',
+    body: 'Concurrent, high-throughput microservices — FastAPI, PostgreSQL, Redis, async pipelines with backpressure and admission control.',
   },
   {
     icon: '▲',
-    title: 'AI-Powered Automation',
-    body: 'Replacing repetitive office workflows with robust, human-in-the-loop pipelines.',
+    title: 'Low-Level & Performance Engineering',
+    body: 'Systems from scratch: an epoll HTTP server in C++17 that beats nginx, a search engine with measured millisecond latency. Benchmarked honestly.',
   },
   {
     icon: '●',
-    title: 'LLM Applications',
-    body: 'Natural language → SQL, semantic parsing, inference optimization.',
+    title: 'Agentic AI Systems',
+    body: 'Multi-agent workflows, reasoning loops, autonomous task execution — LangGraph, CrewAI, human-in-the-loop pipelines.',
   },
   {
     icon: '■',
-    title: 'LLM Fine-Tuning',
-    body: 'LoRA / QLoRA, domain adaptation, rigorous model evaluation.',
+    title: 'LLM Applications & Fine-Tuning',
+    body: 'RAG, natural language → SQL, LoRA/QLoRA domain adaptation, inference optimization, rigorous evaluation.',
+  },
+  {
+    icon: '◇',
+    title: 'Cloud & MLOps',
+    body: 'Docker, Kubernetes (GKE), CI/CD, Prometheus/Grafana observability across AWS and GCP.',
+  },
+  {
+    icon: '△',
+    title: 'Data & ML Engineering',
+    body: 'End-to-end pipelines from ingestion to serving — PyTorch, TensorFlow, XGBoost, distributed evaluation at scale.',
   },
 ];
