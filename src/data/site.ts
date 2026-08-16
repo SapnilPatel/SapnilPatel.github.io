@@ -34,7 +34,7 @@ export const flagships = [
     metrics: [
       { value: '2.3×', label: 'throughput vs FP32 baseline' },
       { value: '−38%', label: 'GPU memory' },
-      { value: 'zero', label: 'downtime deploys — GKE + HPA' },
+      { value: 'p50–p99', label: 'tail latency, tracked & tuned' },
     ],
     architecture: `HTTP ─▶ FastAPI ─▶ InferenceEngine ─▶ DynamicBatcher ─▶ ModelBackend
                      │                   │                  │
