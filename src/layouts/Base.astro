@@ -18,6 +18,22 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ── Security hardening ─────────────────────────────────────────────
+         Static site on GitHub Pages (no server to set HTTP headers), so the
+         controls that CAN live in a meta tag are set here.
+         Content-Security-Policy locks code execution down: scripts may only
+         come from this origin, the two known inline scripts (by SHA-256 hash),
+         and the GoatCounter loader. Everything else — plugins, forms, framing
+         via an injected <base> — is denied. If you EDIT either inline script
+         (reveal-on-scroll or the analytics events below), recompute the two
+         script hashes and update them here, or those scripts will stop running.
+         -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; script-src 'self' https://gc.zgo.at 'sha256-PBhZVrr978fSHxxk/8I7un29Zg92lzOeNaxQo0OdQ3c=' 'sha256-CLkh6ybO8HbJcp8fn8GvMXJUe9oFbjhhSwnX6WXa+PQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://sapnil.goatcounter.com; font-src 'self'; connect-src 'self' https://sapnil.goatcounter.com; upgrade-insecure-requests"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={profile.name} />
