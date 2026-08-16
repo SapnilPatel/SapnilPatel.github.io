@@ -39,12 +39,12 @@ const nav = [
     <!-- ── hero ─────────────────────────────────────────────────────── -->
     <section class="grid items-center gap-12 py-16 md:py-24 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
       <div>
-        <p class="mb-5 inline-flex items-center gap-2 rounded-full border border-moss/30 bg-moss/10 px-3.5 py-1.5 text-xs font-medium text-moss">
-          <span class="relative flex size-2">
+        <p class="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-moss/30 bg-moss/10 px-3.5 py-1.5 text-xs font-medium text-moss">
+          <span class="relative flex size-2 shrink-0">
             <span class="absolute inline-flex size-full animate-ping rounded-full bg-moss opacity-50"></span>
             <span class="relative inline-flex size-2 rounded-full bg-moss"></span>
           </span>
-          {profile.status}
+          <span class="leading-snug">{profile.status}</span>
         </p>
         <h1 class="font-serif text-5xl font-bold tracking-tight text-ink2 md:text-6xl">
           Sapnil Patel

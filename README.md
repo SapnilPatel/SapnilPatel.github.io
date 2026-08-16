@@ -28,6 +28,10 @@ src/
   styles/global.css        ← design tokens ("engineer's notebook" theme)
 ```
 
+## Analytics
+
+The site ships a [GoatCounter](https://www.goatcounter.com/) tag (privacy-friendly, free, no cookies) pointing at `sapnilpatel.goatcounter.com`. **One-time setup:** sign up at goatcounter.com and register the code `sapnilpatel` — the moment that site code exists, stats start flowing. Dashboard: https://sapnilpatel.goatcounter.com.
+
 ## Hosting portability
 
 Nothing here is GitHub-Pages-specific: `npm run build` emits plain static files in `dist/`. To move to Cloudflare Pages / Netlify / Vercel, point them at the repo with build command `npm run build` and output dir `dist`.

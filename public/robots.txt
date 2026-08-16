@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sapnilpatel.github.io/sitemap-index.xml
