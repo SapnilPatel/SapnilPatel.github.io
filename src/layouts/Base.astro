@@ -48,13 +48,65 @@ const {
   </head>
   <body class="min-h-screen">
     <slot />
-    <!-- GoatCounter analytics (privacy-friendly, no cookies). Live once the
-         'sapnilpatel' code is claimed at goatcounter.com — see README. -->
+    <!-- GoatCounter analytics (privacy-friendly, no cookies) — see README. -->
     <script
       data-goatcounter="https://sapnil.goatcounter.com/count"
       async
       src="https://gc.zgo.at/count.js"
     ></script>
+    <script>
+      // ── engagement events → GoatCounter ─────────────────────────────
+      // Sections reached, scroll depth, and high-value clicks show up in
+      // the dashboard as event rows (section/…, scroll/…, click/…).
+      const seen = new Set<string>();
+      function track(path: string, title: string) {
+        if (seen.has(path)) return;
+        const gc = (window as any).goatcounter;
+        if (!gc?.count) return; // script blocked or not loaded yet
+        seen.add(path);
+        gc.count({ path, title, event: true });
+      }
+
+      // which sections the visitor actually reached (fires once each)
+      const sectionIo = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              track(`section/${e.target.id}`, `Viewed: ${e.target.id}`);
+              sectionIo.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.35 }
+      );
+      document.querySelectorAll('section[id]').forEach((s) => sectionIo.observe(s));
+
+      // how far they scroll
+      addEventListener(
+        'scroll',
+        () => {
+          const max = document.documentElement.scrollHeight - innerHeight;
+          if (max <= 0) return;
+          const pct = (scrollY / max) * 100;
+          if (pct >= 90) track('scroll/90', 'Scrolled 90%');
+          else if (pct >= 50) track('scroll/50', 'Scrolled 50%');
+        },
+        { passive: true }
+      );
+
+      // the clicks that matter in a job hunt
+      document.addEventListener('click', (ev) => {
+        const a = (ev.target as Element).closest?.('a');
+        if (!a) return;
+        const href = a.getAttribute('href') ?? '';
+        if (href.includes('resume.pdf')) track('click/resume', 'Résumé download');
+        else if (href.startsWith('mailto:')) track('click/email', 'Email click');
+        else if (href.includes('linkedin.com')) track('click/linkedin', 'LinkedIn click');
+        else if (href.includes('github.com')) track('click/github', 'GitHub / repo click');
+        else if (href.includes('medium.com')) track('click/medium', 'Medium click');
+        else if (href.includes('pubs.aip.org')) track('click/publication', 'Publication click');
+      });
+    </script>
     <script>
       // reveal-on-scroll
       const io = new IntersectionObserver(
