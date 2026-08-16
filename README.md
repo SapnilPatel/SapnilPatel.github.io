@@ -30,7 +30,7 @@ src/
 
 ## Analytics
 
-The site ships a [GoatCounter](https://www.goatcounter.com/) tag (privacy-friendly, free, no cookies) pointing at `sapnil.goatcounter.com`. **One-time setup:** sign up at goatcounter.com and site code: `sapnil` — the moment that site code exists, stats start flowing. Dashboard: https://sapnil.goatcounter.com.
+The site ships a [GoatCounter](https://www.goatcounter.com/) tag — privacy-friendly, free, no cookies — plus custom events for section views, scroll depth, and key clicks.
 
 ## Hosting portability
 
