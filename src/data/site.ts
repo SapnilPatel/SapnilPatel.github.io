@@ -72,12 +72,12 @@ query ─▶ tokenize ─▶ posting-list intersection ─▶ BM25 ─▶ top-K 
 
 export const roles = [
   {
-    title: 'AI Automation Engineer',
+    title: 'AI Automation Intern',
     org: 'Pacific Production Services, Inc. · USA',
     period: 'Jun 2026 — present',
     points: [
       'Architected concurrent, high-throughput backend microservices (Python, FastAPI) automating document parsing — saving $25,000+ annually',
-      'Automated 100% of rental-agreement generation from live scheduling data via an idempotent, unit-tested pipeline with content-hash change detection — saving $55,000+ annually',
+      'Automated 100% of rental-agreement generation from live scheduling data via an idempotent, unit-tested pipeline with content-hash change detection — saving 4 hours of manual work a day and $22,000 a year',
     ],
   },
   {
@@ -90,7 +90,7 @@ export const roles = [
     ],
   },
   {
-    title: 'Software Developer',
+    title: 'Software Developer Intern',
     org: 'Nivaan Infotech · India',
     period: 'Jan 2024 — Oct 2024',
     points: [
