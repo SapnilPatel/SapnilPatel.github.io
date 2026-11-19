@@ -99,7 +99,7 @@ export const roles = [
     ],
   },
   {
-    title: 'AI Engineer',
+    title: 'AI Engineer Intern',
     org: 'CHARUSAT · India',
     period: 'Jan 2023 — Aug 2023',
     points: [
@@ -112,7 +112,7 @@ export const roles = [
     },
   },
   {
-    title: 'Python Developer',
+    title: 'Python Developer Intern',
     org: 'HexaCoder Technologies · India',
     period: 'May 2022 — Jun 2022',
     points: [
